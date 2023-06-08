@@ -1,9 +1,8 @@
 # Food Nutrition Estimation
 Start the app:
-- Move to the directory above this one (**cd ..**)
-- Call: **python food_nutrition_estimation/food_nutrition_app.py** to start the server
+- Call: **python food_nutrition_app.py** to start the server
 - Call: **python test_client.py** to start a test
-- Call: **python food_nutrition_estimation/train_food_rec.py** to train your custom model (first configure the training process in **[food_recognition_options.py](./src/food_recognition_options.py)**)
+- Call: **python src/train_food_rec.py** to train your custom model (first configure the training process in **[food_recognition_options.py](./src/food_recognition_options.py)**)
 
 ## Get the network models
 Download the following files to **[model_dir](./src/models/files)**.
