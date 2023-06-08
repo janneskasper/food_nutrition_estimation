@@ -95,9 +95,9 @@ class FoodRecognitionOptions:
         self.val_img_path = args.val_img
         self.test_img_path = TEST_IMAGE_DIRECTORY
         
-        self.nut_db: str="food_volume_estimation/nutrition_estimation/data/nutrition_db.json"
-        self.density_db: str="food_volume_estimation/nutrition_estimation/data/density_db.xlsx"
-
+        self.nut_db: str="data/nutrition_db.json"
+        self.density_db: str="data/density_db.xlsx"
+        
         self.base_path: str = os.getcwd()
 
     def __parse_args(self, full=True):
@@ -144,10 +144,10 @@ class FoodRecognitionOptions:
     @staticmethod
     def create():
         f = FoodRecognitionOptions()
-        f.depth_options.training_params.model_path_json = "food_volume_estimation/nutrition_estimation/models/files/monovideo_fine_tune_food_videos.json"
-        f.depth_options.training_params.model_weights_path = "food_volume_estimation/nutrition_estimation/models/files/monovideo_fine_tune_food_videos.h5"
+        f.depth_options.training_params.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
+        f.depth_options.training_params.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
 
-        f.seg_options.training_params.model_weights_path = "food_volume_estimation/nutrition_estimation/models/files/seg_model_e18.hdf5"
+        f.seg_options.training_params.model_weights_path = "model_files/seg_model_e18.hdf5"
 
         return f
 

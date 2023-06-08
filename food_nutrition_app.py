@@ -8,7 +8,6 @@ import base64
 import requests
 import io
 from PIL import Image
-import matplotlib.pyplot as plt
 from enum import IntEnum
 import tensorflow as tf
 import cv2

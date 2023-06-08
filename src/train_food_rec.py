@@ -197,10 +197,10 @@ def manualTrainingStep(options: FoodRecognitionOptions):
 
 
 if __name__ == "__main__":
-    # train(FoodRecognitionOptions())
+    train(FoodRecognitionOptions())
     # manualTrainingStep(FoodRecognitionOptions())
-    testModel("/home/jannes/Documents/MasterDelft/Q4/DeepLearning/food_volume_estimation/nutrition_estimation/models/files/seg_model_e18.hdf5",
-              FoodRecognitionOptions(),
-              ["111631.jpg"])
+    # testModel("/home/jannes/Documents/MasterDelft/Q4/DeepLearning/food_volume_estimation/nutrition_estimation/models/files/seg_model_e18.hdf5",
+    #           FoodRecognitionOptions(),
+    #           ["111631.jpg"])
 
 
