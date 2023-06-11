@@ -63,6 +63,7 @@ if __name__ == "__main__":
     # test_img = f"{os.getcwd()}/../datasets/filtered/tomato-raw_salad-leaf-salad-green_0.jpg"
     # test_img = f"{os.getcwd()}/../datasets/filtered/salad-leaf-salad-green_25.jpg"
     # test_img = f"{os.getcwd()}/../datasets/filtered/rice_example.jpg"
-    test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
+    # test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
+    test_img = "test_data/applered3.jpg"
     
     test_run(test_img, type="seg")
