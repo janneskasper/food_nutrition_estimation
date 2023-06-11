@@ -33,19 +33,20 @@ class SegmentationOptions:
         self.training_params = TrainingConfig(args)
         
         self.relax_param = args.relax_param
-        self.classes = ['water',
-                'salad-leaf-salad-green',
-                'bread-white',
-                'tomato-raw',
-                'butter', 
-                'carrot-raw',
-                'rice', 
-                'egg', 
+        self.classes = [
+                # 'water',
+                # 'salad-leaf-salad-green',
+                # 'bread-white',
+                # 'tomato-raw',
+                # 'butter', 
+                # 'carrot-raw',
+                # 'rice', 
+                # 'egg', 
                 'apple', 
-                'jam', 
-                'cucumber', 
-                'banana', 
-                'cheese', 
+                # 'jam', 
+                # 'cucumber', 
+                # 'banana', 
+                # 'cheese', 
             #   'bread-wholemeal', 
             #   'coffee-with-caffeine', 
             #   'mixed-vegetables', 
@@ -88,6 +89,15 @@ class FoodRecognitionOptions:
 
         self.seg_options = SegmentationOptions(args)
         self.depth_options = DepthEstimationOptions(args)
+
+        self.backbone = args.backbone
+        self.batch_size = int(args.batch_size)
+        self.input_size = (224, 224, 2)
+        self.lr = float(args.lr)
+        self.lrd = float(args.lrd)
+        self.steps_epoch = int(args.steps_epoch)
+        self.epochs = int(args.epochs)
+        self.log_dir = args.log_dir
 
         self.train_ann_path = args.train_ann
         self.val_ann_path = args.val_ann
