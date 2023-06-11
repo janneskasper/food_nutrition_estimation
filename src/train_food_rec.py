@@ -10,40 +10,6 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-CLASSES = ['water',
-            'salad-leaf-salad-green',
-            'bread-white',
-            'tomato-raw',
-            'butter', 
-            'carrot-raw',
-            'rice', 
-            'egg', 
-            'apple', 
-            'jam', 
-            'cucumber', 
-            'banana', 
-            'cheese', 
-
-        #   'bread-wholemeal', 
-        #   'coffee-with-caffeine', 
-        #   'mixed-vegetables', 
-        #   'wine-red', 
-        #   'potatoes-steamed', 
-        #   'bell-pepper-red-raw', 
-        #   'hard-cheese', 
-        #   'espresso-with-caffeine', 
-        #   'tea', 
-        #   'bread-whole-wheat', 
-        #   'mixed-salad-chopped-without-sauce', 
-        #   'avocado', 
-        #   'white-coffee-with-caffeine', 
-        #   'tomato-sauce', 
-        #   'wine-white', 
-        #   'broccoli', 
-        #   'strawberries', 
-        #   'pasta-spaghetti'
-            ]
-
 def get_preprocessing(preprocessing_fn):
     """Construct preprocessing transform
     
@@ -69,14 +35,14 @@ def train(options: FoodRecognitionOptions):
                                            annotations_path=options.train_ann_path, 
                                            img_dir=options.train_img_path, 
                                            data_size=options.input_size,
-                                           filter_categories=CLASSES
+                                           filter_categories=options.seg_options.classes
                                            ))
     val_generator = CocoDatasetLoader(CocoDatasetGenerator(batch_size=1,
                                          preprocessor=get_preprocessing(preprocessor), 
                                          annotations_path=options.val_ann_path, 
                                          img_dir=options.val_img_path, 
                                          data_size=options.input_size,
-                                         filter_categories=CLASSES
+                                         filter_categories=options.seg_options.classes
                                          ))
     # class_weights = train_generator.getClassDistribution()
     # max_dist = max(class_weights.values())
@@ -175,7 +141,7 @@ def manualTrainingStep(options: FoodRecognitionOptions):
                                         annotations_path=options.train_ann_path, 
                                         img_dir=options.train_img_path, 
                                         data_size=options.input_size,
-                                        filter_categories=CLASSES
+                                        filter_categories=options.seg_options.classes
                                         )
     t = 0.0
     for i in range(100):
