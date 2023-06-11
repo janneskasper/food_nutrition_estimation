@@ -10,84 +10,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-from models.mrcnn.config import Config
-from models.mrcnn import (
-    model as modellib, 
-    utils)
-
-import inspect
+from models.model_factory_mask_rcnn import FoodConfig, getSegmentationModel
 
 DEFAULT_LOGS_DIR = 'logs/'
-
-CLASSES = [
-            # 'water',
-            # 'salad-leaf-salad-green',
-            # 'bread-white',
-            # 'tomato-raw',
-            # 'butter', 
-            # 'carrot-raw',
-            # 'rice', 
-            # 'egg', 
-            'apple', 
-            # 'jam', 
-            # 'cucumber', 
-            # 'banana', 
-            # 'cheese', 
-
-        #   'bread-wholemeal', 
-        #   'coffee-with-caffeine', 
-        #   'mixed-vegetables', 
-        #   'wine-red', 
-        #   'potatoes-steamed', 
-        #   'bell-pepper-red-raw', 
-        #   'hard-cheese', 
-        #   'espresso-with-caffeine', 
-        #   'tea', 
-        #   'bread-whole-wheat', 
-        #   'mixed-salad-chopped-without-sauce', 
-        #   'avocado', 
-        #   'white-coffee-with-caffeine', 
-        #   'tomato-sauce', 
-        #   'wine-white', 
-        #   'broccoli', 
-        #   'strawberries', 
-        #   'pasta-spaghetti'
-            ]
-
-class FoodConfig(Config):
-    # Give the configuration a unique name
-    # Give the configuration a recognizable name
-    NAME = 'Food_segmentation'
-
-    # Adjust to appropriate GPU specifications
-    GPU_COUNT = 1
-
-    # # Try one 20230610T2213
-    IMAGES_PER_GPU = 1
-
-    
-    # # Try two 20230610T2251
-    IMAGES_PER_GPU = 3
-    BACKBONE = 'resnet50'
-
-    # # Number of classes (including background)
-    # NUM_CLASSES = 1 + len(clusters)
-
-    # Otherwise batch_gt_class_ids[b, :gt_class_ids.shape[0]] = gt_class_ids will crash
-    MAX_GT_INSTANCES = 200
-
-    # Number of training steps per epoch
-    STEPS_PER_EPOCH = 3000 // IMAGES_PER_GPU
-
-    # Validation steps per epoch
-    VALIDATION_STEPS = 300 // IMAGES_PER_GPU
-
-    # Less ROIs to keep 1:3 ratio
-    TRAIN_ROIS_PER_IMAGE = 128
-
-    def __init__(self, num_classes):
-        self.NUM_CLASSES = 1 + num_classes
-        super().__init__()
 
 def get_preprocessing(preprocessing_fn):
     """Construct preprocessing transform
@@ -106,21 +31,21 @@ def get_preprocessing(preprocessing_fn):
     return A.Compose(_transform)
 
 def train(options: FoodRecognitionOptions):
-    model = getModel(options=options)
+    model = getSegmentationModel(options=options)
     preprocessor = sm.get_preprocessing(options.backbone)
     train_generator = CocoDatasetLoader(CocoDatasetGenerator(batch_size=options.batch_size,
                                            preprocessor=get_preprocessing(preprocessor), 
                                            annotations_path=options.train_ann_path, 
                                            img_dir=options.train_img_path, 
                                            data_size=options.input_size,
-                                           filter_categories=CLASSES
+                                           filter_categories=options.seg_options.classes
                                            ))
     val_generator = CocoDatasetLoader(CocoDatasetGenerator(batch_size=1,
                                          preprocessor=get_preprocessing(preprocessor), 
                                          annotations_path=options.val_ann_path, 
                                          img_dir=options.val_img_path, 
                                          data_size=options.input_size,
-                                         filter_categories=CLASSES
+                                         filter_categories=options.seg_options.classes
                                          ))
     # class_weights = train_generator.getClassDistribution()
     # max_dist = max(class_weights.values())
@@ -153,10 +78,10 @@ def train(options: FoodRecognitionOptions):
 def getModel(options: FoodRecognitionOptions):
     num_classes = len(options.seg_options.classes) + 1 # + 1 for adding background
 
-    config = FoodConfig(num_classes)
-    model = modellib.MaskRCNN(mode='training', config=config,
-                                  model_dir=DEFAULT_LOGS_DIR)
-    model.compile(config.LEARNING_RATE, config.LEARNING_MOMENTUM)
+    model: keras.models.Model = sm.Unet(options.seg_options.training_params.backbone, 
+                                        encoder_weights="imagenet", 
+                                        # input_shape=options.input_size, 
+                                        classes=num_classes)
     
     dice_loss = sm.losses.DiceLoss(class_indexes=np.arange(len(options.seg_options.classes))) # last class is the background we want to ignore
     focal_loss = sm.losses.BinaryFocalLoss() if num_classes == 1 else sm.losses.CategoricalFocalLoss(class_indexes=np.arange(len(options.seg_options.classes)))
@@ -165,8 +90,8 @@ def getModel(options: FoodRecognitionOptions):
                sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(options.seg_options.classes)))]
     optim = keras.optimizers.Adam(lr=options.seg_options.training_params.lr)
 
-    # if options.seg_options.training_params.model_weights_path is not None and os.path.isfile(options.seg_options.training_params.model_weights_path):
-    #     model.load_weights(options.seg_options.training_params.model_weights_path)
+    if options.seg_options.training_params.model_weights_path is not None and os.path.isfile(options.seg_options.training_params.model_weights_path):
+        model.load_weights(options.seg_options.training_params.model_weights_path)
 
     model.keras_model.compile(optimizer=optim, loss=total_loss, metrics=metrics)
     return model
@@ -219,7 +144,7 @@ def manualTrainingStep(options: FoodRecognitionOptions):
                                         annotations_path=options.train_ann_path, 
                                         img_dir=options.train_img_path, 
                                         data_size=options.input_size,
-                                        filter_categories=CLASSES
+                                        filter_categories=options.seg_options.classes
                                         )
     t = 0.0
     for i in range(100):

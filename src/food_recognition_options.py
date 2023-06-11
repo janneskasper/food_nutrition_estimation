@@ -92,7 +92,7 @@ class FoodRecognitionOptions:
 
         self.backbone = args.backbone
         self.batch_size = int(args.batch_size)
-        self.input_size = (224, 224, 2)
+        self.input_size = (224, 224, 3)
         self.lr = float(args.lr)
         self.lrd = float(args.lrd)
         self.steps_epoch = int(args.steps_epoch)

@@ -3,11 +3,11 @@ import keras
 import numpy as np
 import os
 import json
-from src.food_recognition_options import FoodRecognitionOptions
-from src.models.custom_modules import *
+from food_recognition_options import FoodRecognitionOptions
+from models.custom_modules import *
 
-from mrcnn.config import Config
-from mrcnn import (
+from models.mrcnn.config import Config
+from models.mrcnn import (
     model as modellib, 
     utils)
 
@@ -24,13 +24,12 @@ class FoodConfig(Config):
     GPU_COUNT = 1
 
     # # Try one 20230610T2213
-    IMAGES_PER_GPU = 1
+    # IMAGES_PER_GPU = 1
 
     
     # # Try two 20230610T2251
     IMAGES_PER_GPU = 3
-    BACKBONE = 'resnet18'
-
+    BACKBONE = 'resnet50'
 
     # # Number of classes (including background)
     # NUM_CLASSES = 1 + len(clusters)
@@ -48,7 +47,7 @@ class FoodConfig(Config):
     TRAIN_ROIS_PER_IMAGE = 128
 
     def __init__(self, num_classes):
-        self.NUM_CLASSES = 1 + num_classes
+        self.NUM_CLASSES = num_classes
         super().__init__()
 
 def getSegmentationModel(options: FoodRecognitionOptions):
@@ -56,11 +55,7 @@ def getSegmentationModel(options: FoodRecognitionOptions):
 
     num_classes = len(options.seg_options.classes) + 1 # + 1 for adding background
 
-    # model: keras.models.Model = sm.Unet(options.seg_options.training_params.backbone, 
-    #                                     encoder_weights="imagenet", 
-    #                                     # input_shape=options.input_size, 
-    #                                     classes=num_classes)
-    model: keras.models.Model = modellib.MaskRCNN(mode='training', config=FoodConfig(len(options.seg_options.classes)),
+    model: keras.models.Model = modellib.MaskRCNN(mode='training', config=FoodConfig(num_classes),
                                   model_dir=DEFAULT_LOGS_DIR)
     
     dice_loss = sm.losses.DiceLoss(class_indexes=np.arange(len(options.seg_options.classes))) # last class is the background we want to ignore
@@ -70,12 +65,15 @@ def getSegmentationModel(options: FoodRecognitionOptions):
                sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(options.seg_options.classes)))]
     optim = keras.optimizers.Adam(lr=options.seg_options.training_params.lr)
 
-    weights_path = os.path.join(options.base_path, options.seg_options.training_params.model_weights_path)
+    # weights_path = os.path.join(options.base_path, options.seg_options.training_params.model_weights_path)
 
-    if weights_path is not None and os.path.isfile(weights_path):
-        model.load_weights(weights_path)
+    # if weights_path is not None and os.path.isfile(weights_path):
+    #     model.load_weights(weights_path)
+    model.load_weights("model_files/mask_rcnn_food_segmentation.h5", by_name=True, 
+                       exclude=["mrcnn_class_logits", "mrcnn_bbox_fc", "mrcnn_bbox", "mrcnn_mask"])
 
-    model.compile(optimizer=optim, loss=total_loss, metrics=metrics)
+    # FUCKED
+    model.keras_model.compile(optimizer=optim, loss=total_loss, metrics=metrics)
     return model
 
 def getDepthEstimationModel(options: FoodRecognitionOptions):
