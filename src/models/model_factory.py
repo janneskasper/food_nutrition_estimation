@@ -7,7 +7,7 @@ from src.food_recognition_options import FoodRecognitionOptions
 from src.models.custom_modules import *
 
 def getSegmentationModel(options: FoodRecognitionOptions):
-    print("Loading food segmentation model ...")
+    print("[*] Loading food segmentation model ...")
 
     num_classes = len(options.seg_options.classes) + 1 # + 1 for adding background
 
@@ -33,7 +33,7 @@ def getSegmentationModel(options: FoodRecognitionOptions):
 
 def getDepthEstimationModel(options: FoodRecognitionOptions):
     # Load depth estimation model
-    print("Loading depth estimation model ...")
+    print("[*] Loading depth estimation model ...")
 
     custom_losses = Losses()
     objs = {'ProjectionLayer': ProjectionLayer,
