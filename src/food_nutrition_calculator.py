@@ -91,9 +91,9 @@ class FoodNutritionCalculator:
         else:
             # Use the median ground truth depth scaling when not using
             # the plate contour
-            print('[*] No ellipse found. Scaling with expected median depth.')
             predicted_median_depth = np.median(1 / disparity_map)
             scaling = gt_depth_scale / predicted_median_depth
+            print('[*] No ellipse found. Scaling with expected median depth: ', scaling, 'from median depth: ', predicted_median_depth)
         print('[*] Scaling factor:', scaling)
         return scaling
 

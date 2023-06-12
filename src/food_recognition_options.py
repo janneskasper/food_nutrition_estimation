@@ -134,7 +134,7 @@ class FoodRecognitionOptions:
                             help="Min prediction depth")
         parser.add_argument("--max_depth", type=float, default=10.0, 
                             help="Max prediction depth")
-        parser.add_argument("--gt_depth_scale", type=float, default=0.35, 
+        parser.add_argument("--gt_depth_scale", type=float, default=0.65, 
                             help="Max prediction depth")
         parser.add_argument("--relax_param", type=float, default=0.1, 
                             help="Max prediction depth")
@@ -160,7 +160,7 @@ class FoodRecognitionOptions:
         # f.seg_options.training_params.model_weights_path =  "model_files/seg_model_e18.hdf5"
         
         # apples
-        f.seg_options.training_params.model_weights_path = "logs/train_20230611-230608/final_model.hdf5"
+        f.seg_options.training_params.model_weights_path = "model_files/apple_model.hdf5"
         
         return f
 
