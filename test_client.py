@@ -8,7 +8,7 @@ import io
 import numpy as np
 
 
-def test_run(img_path, size=(320,320), type="seg"):
+def test_run(img_path, size=(224,224), type="seg"):
     im = Image.open(img_path)
     im = im.resize(size)
 
@@ -63,6 +63,8 @@ if __name__ == "__main__":
     # test_img = f"{os.getcwd()}/../datasets/filtered/tomato-raw_salad-leaf-salad-green_0.jpg"
     # test_img = f"{os.getcwd()}/../datasets/filtered/salad-leaf-salad-green_25.jpg"
     # test_img = f"{os.getcwd()}/../datasets/filtered/rice_example.jpg"
-    test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
+    test_img = "test_data/applered1.jpg"
     
-    test_run(test_img, type="seg")
+    # test_run(test_img, type="seg")
+    # test_run(test_img, type="depth")
+    test_run(test_img, type="nut")

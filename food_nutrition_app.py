@@ -15,20 +15,22 @@ import cv2
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 class FoodColorScheme(IntEnum):
-    WATER=0,
-    SALAD=1,
-    BREAD=2,
-    TOMATO=3,
-    BUTTER=4,
-    CARROT=5,
-    RICE=6,
-    EGG=7,
-    APPLE=8,
-    JAM=9,
-    CUCUMBER=10,
-    BANANA=11,
-    CHEESE=12,
-    BACKGROUND=13
+    # WATER=0,
+    # SALAD=1,
+    # BREAD=2,
+    # TOMATO=3,
+    # BUTTER=4,
+    # CARROT=5,
+    # RICE=6,
+    # EGG=7,
+    # APPLE=8,
+    # JAM=9,
+    # CUCUMBER=10,
+    # BANANA=11,
+    # CHEESE=12,
+    # BACKGROUND=13
+    APPLE=0,
+    BACKGROUND=1
 
 
 
@@ -120,19 +122,19 @@ class FoodNutritionApp:
         return nut_scores_per_class
     
     def __getColorScheme(self):
-        self.color_mapping[FoodColorScheme.WATER] = (0, 0, 255)          
-        self.color_mapping[FoodColorScheme.SALAD] = (50, 205, 50)         
-        self.color_mapping[FoodColorScheme.BREAD] = (205, 133, 63)       
-        self.color_mapping[FoodColorScheme.TOMATO] = (255, 99, 71)        
-        self.color_mapping[FoodColorScheme.BUTTER] = (255, 255, 102)      
-        self.color_mapping[FoodColorScheme.CARROT] = (255, 165, 0)       
-        self.color_mapping[FoodColorScheme.RICE] = (255, 255, 224)       
-        self.color_mapping[FoodColorScheme.EGG] = (255, 255, 102)         
+        # self.color_mapping[FoodColorScheme.WATER] = (0, 0, 255)          
+        # self.color_mapping[FoodColorScheme.SALAD] = (50, 205, 50)         
+        # self.color_mapping[FoodColorScheme.BREAD] = (205, 133, 63)       
+        # self.color_mapping[FoodColorScheme.TOMATO] = (255, 99, 71)        
+        # self.color_mapping[FoodColorScheme.BUTTER] = (255, 255, 102)      
+        # self.color_mapping[FoodColorScheme.CARROT] = (255, 165, 0)       
+        # self.color_mapping[FoodColorScheme.RICE] = (255, 255, 224)       
+        # self.color_mapping[FoodColorScheme.EGG] = (255, 255, 102)         
         self.color_mapping[FoodColorScheme.APPLE] = (0, 255, 0)          
-        self.color_mapping[FoodColorScheme.JAM] = (165, 42, 42)          
-        self.color_mapping[FoodColorScheme.CUCUMBER] = (34, 139, 34)     
-        self.color_mapping[FoodColorScheme.BANANA] = (255, 255, 0)       
-        self.color_mapping[FoodColorScheme.CHEESE] = (255, 215, 0)       
+        # self.color_mapping[FoodColorScheme.JAM] = (165, 42, 42)          
+        # self.color_mapping[FoodColorScheme.CUCUMBER] = (34, 139, 34)     
+        # self.color_mapping[FoodColorScheme.BANANA] = (255, 255, 0)       
+        # self.color_mapping[FoodColorScheme.CHEESE] = (255, 215, 0)       
         self.color_mapping[FoodColorScheme.BACKGROUND] = (192, 192, 192) 
 
     def __processSegmentation(self, output):
