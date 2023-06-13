@@ -103,9 +103,9 @@ class FoodNutritionApp:
             if self.visualize:
                 depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map[i,:,:,0]), scaling=scaling)
 
-            combined_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
-            
-            prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
+                combined_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
+                
+                prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
 
         return nut_scores_per_class
 
@@ -189,7 +189,7 @@ def predictSegmentation():
 
 def run_app():
     global food_nutrition_app
-    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.createRunConfig(), visualize=True)
+    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.createRunConfig(), visualize=False)
     app.run(host="localhost", port=4333, debug=False)
 
 
