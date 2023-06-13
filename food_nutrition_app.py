@@ -92,11 +92,20 @@ class FoodNutritionApp:
         return return_vals
     
     def predictNutrition(self, data: requests.Request):
-        img, plate_diameter = self.__getData(data=data)
-        img_d = cv2.resize(img, (224,128))
-        img_d = cv2.cvtColor(img_d, cv2.COLOR_BGR2RGB) / 255
-        img_d_batch = np.expand_dims(img_d, axis=0)
-        img_batch = np.expand_dims(img, axis=0)
+        images, plate_diameter = self.__getData(data=data)
+        imag_batch = []
+        imag_d_batch = []
+        for img in images:
+            img_d = cv2.resize(img, (224,128))
+            img_d = cv2.cvtColor(img_d, cv2.COLOR_BGR2RGB) / 255
+            # DELETE
+            # img_d_batch = np.expand_dims(img_d, axis=0)
+            # img_batch = np.expand_dims(img, axis=0)
+            imag_batch.append(img)
+            imag_d_batch.append(img_d)
+
+        img_batch = np.array(imag_batch)
+        img_d_batch = np.array(imag_d_batch)
 
         with self.graph.as_default():
             seg_masks = self.seg_model.predict(img_batch)[0]
@@ -156,7 +165,10 @@ class FoodNutritionApp:
         try:
             content = json.loads(data.get_json())
             img_encoded = content['img']
-            img = self.__decodeImage(img_encoded)
+            if isinstance(img_encoded, list):
+                img = [self.__decodeImage(e) for e in img_encoded]
+            else:
+                img = [self.__decodeImage(img_encoded)]
         except Exception as e:
             print(e, flush=True)
             abort(406)
