@@ -1,5 +1,7 @@
 import argparse
 import os
+import json
+
 
 ALL_CLASSES = ['water',
                'salad-leaf-salad-green',
@@ -87,6 +89,12 @@ class TrainingConfig:
         self.train_img_path = args.train_img
         self.val_img_path = args.val_img
         self.test_img_path = "./"
+
+    def saveToJson(self, path):
+        json_dict = json.dumps(self, default=lambda o: o.__dict__,  sort_keys=True, indent=4)
+        
+        with open(path, "w") as f:
+            f.write(json_dict)
 
     @staticmethod
     def createTrainConfig():
@@ -198,6 +206,9 @@ class ModelConfig:
         self.model_path_json = None
         self.input_size = args.input_size
         self.classes = []
+
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__,  sort_keys=True, indent=4)
 
 
 class SegmentationOptions:
