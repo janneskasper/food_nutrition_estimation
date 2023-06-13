@@ -34,7 +34,7 @@ class CocoDatasetGenerator:
                  img_dir: str, 
                  preprocessor=None,
                  filter_categories=None, 
-                 data_size=(455,455), 
+                 data_size=(224,224), 
                  batch_size=12) -> None:
         """ Initialize CocoDatasetGenerator
 
@@ -44,7 +44,7 @@ class CocoDatasetGenerator:
             filter_categories (list, optional): List of category names to use. Uses all if None. Defaults to None.
             data_size (tuple, optional): The size of the generator output images and masks. Defaults to (455,455).
         """
-        assert os.path.isfile(annotations_path), f"Provided path for train annotations is invalid!"
+        assert os.path.isfile(annotations_path), f"Provided path ({annotations_path}) for train annotations is invalid!"
         self.annotations_path = annotations_path
         self.img_dir = img_dir
         self.data_size = data_size
@@ -324,45 +324,3 @@ class CocoDatasetLoader(keras.utils.Sequence):
 
     def __len__(self):
         return len(self.dataset)
-
-if __name__ == "__main__":
-    TRAIN_ANNOTATIONS_PATH = "/home/jannes/Documents/MasterDelft/Q4/DeepLearning/datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json"
-    TRAIN_IMAGE_DIRECTORY = "/home/jannes/Documents/MasterDelft/Q4/DeepLearning/datasets/food_rec/raw_data/public_training_set_release_2.0/images/"
-
-    VAL_ANNOTATIONS_PATH = "/home/jannes/Documents/MasterDelft/Q4/DeepLearning/datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json"
-    VAL_IMAGE_DIRECTORY = "/home/jannes/Documents/MasterDelft/Q4/DeepLearning/datasets/food_rec/raw_data/public_validation_set_2.0/images/"
-    CLASSES = ['water',
-                'salad-leaf-salad-green',
-                'bread-white',
-                'tomato-raw',
-                'butter', 
-                'carrot-raw',
-                'rice', 
-                'egg', 
-                'apple', 
-                'jam', 
-                'cucumber', 
-                'banana', 
-                'cheese', 
-            #   'wine-red', 
-            #   'banana', 
-            #   'cheese', 
-            #   'potatoes-steamed', 
-            #   'bell-pepper-red-raw', 
-            #   'hard-cheese', 
-            #   'espresso-with-caffeine', 
-            #   'tea', 
-            #   'bread-whole-wheat', 
-            #   'mixed-salad-chopped-without-sauce', 
-            #   'avocado', 
-            #   'white-coffee-with-caffeine', 
-            #   'tomato-sauce', 
-            #   'wine-white', 
-            #   'broccoli', 
-            #   'strawberries', 
-            #   'pasta-spaghetti'
-              ]
-    base = os.getcwd()
-    m = CocoDatasetGenerator(VAL_ANNOTATIONS_PATH, VAL_IMAGE_DIRECTORY, filter_categories=CLASSES, batch_size=32)
-    m.extractImages(os.path.join(base,"datasets/food_rec/raw_data/public_validation_set_2.0/images"),
-                    os.path.join(base ,"datasets/filtered"))
