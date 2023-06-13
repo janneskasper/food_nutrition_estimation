@@ -98,36 +98,38 @@ class FoodNutritionApp:
         for img in images:
             img_d = cv2.resize(img, (224,128))
             img_d = cv2.cvtColor(img_d, cv2.COLOR_BGR2RGB) / 255
-            # DELETE
-            # img_d_batch = np.expand_dims(img_d, axis=0)
-            # img_batch = np.expand_dims(img, axis=0)
             imag_batch.append(img)
             imag_d_batch.append(img_d)
 
         img_batch = np.array(imag_batch)
         img_d_batch = np.array(imag_d_batch)
 
+        # Predict segmentation and depth of batch
         with self.graph.as_default():
-            seg_masks = self.seg_model.predict(img_batch)[0]
-            inv_disp_map = self.depth_model.predict(img_d_batch, batch_size=1)[0][0,:,:,0] 
+            seg_masks = self.seg_model.predict(img_batch)
+            inv_disp_map = self.depth_model.predict(img_d_batch, batch_size=1)[0]
 
-        disparity_map = (self.depth_options.min_disp + (self.depth_options.max_disp - self.depth_options.min_disp) * inv_disp_map)
-        mask_onehot = self.__processSegmentation(seg_masks)
-
-        with self.graph.as_default():
-            volumes_per_class, scaling = self.calculator.calculateVolume(img, mask_onehot, disparity_map, 
-                                                                            fov=self.options.depth_options.fov, 
-                                                                            gt_depth_scale=self.options.depth_options.gt_depth_scale,
-                                                                            relaxation_param=self.options.seg_options.relax_param,
-                                                                            plate_diameter_prior=plate_diameter)
-        nut_scores_per_class = self.calculator.calculateNutrition(volumes_per_class)
-
-        if self.visualize:
-            depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map), scaling=scaling)
-
-            combined_mask = prettySegmentation(mask_onehot, self.color_mapping)
+        # For all images in batch, predict nutrition
+        nut_scores_per_class = []
+        for i in range(len(seg_masks)):
+            disparity_map = (self.depth_options.min_disp + (self.depth_options.max_disp - self.depth_options.min_disp) * inv_disp_map[i,:,:,0])
             
-            prettyPlotting([img, depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
+            mask_onehot = self.__processSegmentation(seg_masks[i])
+
+            with self.graph.as_default():
+                volumes_per_class, scaling = self.calculator.calculateVolume(img_batch[i], mask_onehot, disparity_map, 
+                                                                                fov=self.options.depth_options.fov, 
+                                                                                gt_depth_scale=self.options.depth_options.gt_depth_scale,
+                                                                                relaxation_param=self.options.seg_options.relax_param,
+                                                                                plate_diameter_prior=plate_diameter)
+            nut_scores_per_class.append(self.calculator.calculateNutrition(volumes_per_class))
+
+            if self.visualize:
+                depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map[i,:,:,0]), scaling=scaling)
+
+                combined_mask = prettySegmentation(mask_onehot, self.color_mapping)
+                
+                prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
 
         return nut_scores_per_class
     
