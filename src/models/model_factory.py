@@ -3,35 +3,38 @@ import keras
 import numpy as np
 import os
 import json
-from src.food_recognition_options import FoodRecognitionOptions
+from src.food_recognition_options import ModelConfig
 from src.models.custom_modules import *
 
-def getSegmentationModel(options: FoodRecognitionOptions):
+def getSegmentationModel(config: ModelConfig, lr=0.001):
     print("[*] Loading food segmentation model ...")
 
-    num_classes = len(options.seg_options.classes) + 1 # + 1 for adding background
+    num_classes = len(config.classes) + 1 # + 1 for adding background
 
-    model: keras.models.Model = sm.Unet(options.seg_options.training_params.backbone, 
+    model: keras.models.Model = sm.Unet(config.model_backbone, 
                                         encoder_weights="imagenet", 
                                         # input_shape=options.input_size, 
                                         classes=num_classes)
     
-    dice_loss = sm.losses.DiceLoss(class_indexes=np.arange(len(options.seg_options.classes))) # last class is the background we want to ignore
-    focal_loss = sm.losses.BinaryFocalLoss() if options.seg_options.classes == 1 else sm.losses.CategoricalFocalLoss(class_indexes=np.arange(len(options.seg_options.classes)))
+    dice_loss = sm.losses.DiceLoss(class_indexes=np.arange(len(config.classes))) # last class is the background we want to ignore
+    focal_loss = sm.losses.BinaryFocalLoss() if config.classes == 1 else sm.losses.CategoricalFocalLoss(class_indexes=np.arange(len(config.classes)))
     total_loss = dice_loss + focal_loss
-    metrics = [sm.metrics.IOUScore(threshold=0.5, class_indexes=np.arange(len(options.seg_options.classes))), 
-               sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(options.seg_options.classes)))]
-    optim = keras.optimizers.Adam(lr=options.seg_options.training_params.lr)
 
-    weights_path = os.path.join(options.base_path, options.seg_options.training_params.model_weights_path)
+    metrics = [sm.metrics.IOUScore(threshold=0.5, class_indexes=np.arange(len(config.classes))), 
+               sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(config.classes)))]
+    
+    optim = keras.optimizers.Adam(lr=lr)
 
-    if weights_path is not None and os.path.isfile(weights_path):
+    weights_path = os.path.join(os.getcwd(), config.model_weights_path)
+
+    if weights_path is not None:
+        assert os.path.isfile(weights_path), f"Loading segmentation model weights: file not found!"
         model.load_weights(weights_path)
 
     model.compile(optimizer=optim, loss=total_loss, metrics=metrics)
     return model
 
-def getDepthEstimationModel(options: FoodRecognitionOptions):
+def getDepthEstimationModel(config: ModelConfig):
     # Load depth estimation model
     print("[*] Loading depth estimation model ...")
 
@@ -42,8 +45,11 @@ def getDepthEstimationModel(options: FoodRecognitionOptions):
             'AugmentationLayer': AugmentationLayer,
             'compute_source_loss': custom_losses.compute_source_loss}
     
-    model_path = os.path.join(options.depth_options.training_params.model_path_json)
-    model_weights_path = os.path.join(options.depth_options.training_params.model_weights_path)
+    model_path = os.path.join(os.getcwd(), config.model_path_json)
+    model_weights_path = os.path.join(os.getcwd(), config.model_weights_path)
+
+    assert os.path.isfile(model_path), f"Loading depth model: file not found!"
+    assert os.path.isfile(model_weights_path), f"Loading depth model weights: file not found!"
 
     with open(model_path, 'r') as read_file:
         model_architecture_json = json.load(read_file)
