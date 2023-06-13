@@ -29,25 +29,25 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-def prettySegmentation(one_hot_mask: np.ndarray, color_scheme: dict):
+def prettySegmentation(one_hot_mask: np.ndarray, classes: list, color_scheme: dict):
     """ Combines one hot encoded segmentation mask based on a color scheme.
 
     Args:
         one_hot_mask (np.ndarray): One hot encoded masks
-        color_scheme (dict): Color scheme with indices as keys and colors as value
+        color_scheme (dict): Color scheme with class names as keys and colors as value
 
     Returns:
         np.ndarray: Combined colored mask
     """
     pretty_mask = np.zeros((one_hot_mask.shape[0], one_hot_mask.shape[1], 3))
-    for class_i in color_scheme.keys():
-        m = one_hot_mask[...,int(class_i)] == 1.0
+    for i, class_i in enumerate(classes):
+        m = one_hot_mask[...,i] == 1.0
         if len(m) == 0:
             continue
-        pretty_mask[m] = color_scheme[int(class_i)]
+        pretty_mask[m] = color_scheme[class_i]
     return pretty_mask
 
-def prettyPlotting(imgs, tiling, titles, suptitle=None, colorScheme: dict=None):
+def prettyPlotting(imgs, tiling, titles, suptitle=None):
     """Plot images in a pretty grid.
 
     Inputs:

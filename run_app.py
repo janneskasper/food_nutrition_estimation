@@ -8,30 +8,10 @@ import base64
 import requests
 import io
 from PIL import Image
-from enum import IntEnum
 import tensorflow as tf
 import cv2
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
-class FoodColorScheme(IntEnum):
-    # WATER=0,
-    # SALAD=1,
-    # BREAD=2,
-    # TOMATO=3,
-    # BUTTER=4,
-    # CARROT=5,
-    # RICE=6,
-    # EGG=7,
-    # APPLE=8,
-    # JAM=9,
-    # CUCUMBER=10,
-    # BANANA=11,
-    # CHEESE=12,
-    # BACKGROUND=13
-    APPLE=0,
-    BACKGROUND=1
-
 
 
 class FoodNutritionApp:
@@ -39,20 +19,16 @@ class FoodNutritionApp:
     def __init__(self, options: FoodRecognitionOptions, visualize=False) -> None:
         self.calculator = FoodNutritionCalculator(os.path.join(options.base_path, options.nut_db), 
                                                   os.path.join(options.base_path, options.density_db), 
-                                                  options.seg_options.classes)
+                                                  options.seg_options.model_config.classes)
         self.visualize = visualize
-        self.seg_model = getSegmentationModel(options=options)
-        self.depth_model = getDepthEstimationModel(options=options)
+        self.seg_model = getSegmentationModel(config=options.seg_options.model_config)
+        self.depth_model = getDepthEstimationModel(config=options.depth_options.model_config)
         self.options = options
         self.depth_options = options.depth_options
         self.segment_options = options.seg_options
         self.graph = tf.compat.v1.get_default_graph()
 
-        self.color_mapping = {}
-
-        self.__getColorScheme()
-
-        print("Setup done!")
+        print("[*] Setup done!")
 
     def predictDepth(self, data: requests.Request):
         img, plate_diameter = self.__getData(data=data)
@@ -82,7 +58,7 @@ class FoodNutritionApp:
 
         mask_onehot = self.__processSegmentation(seg_masks)
 
-        pretty_mask = prettySegmentation(mask_onehot, self.color_mapping)
+        pretty_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
 
         if self.visualize: prettyPlotting([img, pretty_mask], (2,1), ['Input Image','Combined Mask'], 'Food Segmentation')
 
@@ -127,31 +103,15 @@ class FoodNutritionApp:
             if self.visualize:
                 depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map[i,:,:,0]), scaling=scaling)
 
-                combined_mask = prettySegmentation(mask_onehot, self.color_mapping)
-                
-                prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
+            combined_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
+            
+            prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
 
         return nut_scores_per_class
-    
-    def __getColorScheme(self):
-        # self.color_mapping[FoodColorScheme.WATER] = (0, 0, 255)          
-        # self.color_mapping[FoodColorScheme.SALAD] = (50, 205, 50)         
-        # self.color_mapping[FoodColorScheme.BREAD] = (205, 133, 63)       
-        # self.color_mapping[FoodColorScheme.TOMATO] = (255, 99, 71)        
-        # self.color_mapping[FoodColorScheme.BUTTER] = (255, 255, 102)      
-        # self.color_mapping[FoodColorScheme.CARROT] = (255, 165, 0)       
-        # self.color_mapping[FoodColorScheme.RICE] = (255, 255, 224)       
-        # self.color_mapping[FoodColorScheme.EGG] = (255, 255, 102)         
-        self.color_mapping[FoodColorScheme.APPLE] = (0, 255, 0)          
-        # self.color_mapping[FoodColorScheme.JAM] = (165, 42, 42)          
-        # self.color_mapping[FoodColorScheme.CUCUMBER] = (34, 139, 34)     
-        # self.color_mapping[FoodColorScheme.BANANA] = (255, 255, 0)       
-        # self.color_mapping[FoodColorScheme.CHEESE] = (255, 215, 0)       
-        self.color_mapping[FoodColorScheme.BACKGROUND] = (192, 192, 192) 
 
     def __processSegmentation(self, output):
         output_raw = np.argmax(output, axis=2)
-        masks_onehot = np.eye(len(self.segment_options.classes)+1)[output_raw]
+        masks_onehot = np.eye(len(self.segment_options.model_config.classes)+1)[output_raw]
         return masks_onehot
 
     def __processDepthPrediction(self, output, scaling):
@@ -229,14 +189,10 @@ def predictSegmentation():
 
 def run_app():
     global food_nutrition_app
-    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.create(), visualize=False)
+    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.createRunConfig(), visualize=True)
     app.run(host="localhost", port=4333, debug=False)
 
 
 if __name__ == "__main__":
     run_app()
-    # options = FoodRecognitionOptions.create()
-    # c = FoodNutritionCalculator(nutrition_db_path=os.path.join(options.base_path, options.nut_db), 
-    #                             density_db_path=os.path.join(options.base_path, options.density_db), 
-    #                             classes=["banana", "apple"])
-    # for e in c.calculateNutrition({"banana": 300.0, "apple": 233.0}).items(): print(e)
+
