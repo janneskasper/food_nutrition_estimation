@@ -11,7 +11,7 @@ class DensityDatabase():
         Inputs:
             db_path: Path to database excel file (.xlsx) or Google Sheets ID.
         """
-        print("Loading food density database ...")
+        print("[*] Loading food density database ...")
         sheet = 'Density DB'
         if os.path.exists(db_path):
             # Read density database from excel file

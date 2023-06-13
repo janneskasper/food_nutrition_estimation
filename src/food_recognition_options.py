@@ -33,19 +33,20 @@ class SegmentationOptions:
         self.training_params = TrainingConfig(args)
         
         self.relax_param = args.relax_param
-        self.classes = ['water',
-                'salad-leaf-salad-green',
-                'bread-white',
-                'tomato-raw',
-                'butter', 
-                'carrot-raw',
-                'rice', 
-                'egg', 
+        self.classes = [
+                # 'water',
+                # 'salad-leaf-salad-green',
+                # 'bread-white',
+                # 'tomato-raw',
+                # 'butter', 
+                # 'carrot-raw',
+                # 'rice', 
+                # 'egg', 
                 'apple', 
-                'jam', 
-                'cucumber', 
-                'banana', 
-                'cheese', 
+                # 'jam', 
+                # 'cucumber', 
+                # 'banana', 
+                # 'cheese', 
             #   'bread-wholemeal', 
             #   'coffee-with-caffeine', 
             #   'mixed-vegetables', 
@@ -89,6 +90,15 @@ class FoodRecognitionOptions:
         self.seg_options = SegmentationOptions(args)
         self.depth_options = DepthEstimationOptions(args)
 
+        self.backbone = args.backbone
+        self.batch_size = int(args.batch_size)
+        self.input_size = args.input_size
+        self.lr = float(args.lr)
+        self.lrd = float(args.lrd)
+        self.steps_epoch = int(args.steps_epoch)
+        self.epochs = int(args.epochs)
+        self.log_dir = args.log_dir
+
         self.train_ann_path = args.train_ann
         self.val_ann_path = args.val_ann
         self.train_img_path = args.train_img
@@ -104,7 +114,7 @@ class FoodRecognitionOptions:
         parser = argparse.ArgumentParser()
         parser.add_argument("-b", "--batch_size", type=int, default=32, 
                             help="Defines the training batch size")
-        parser.add_argument("-i", "--input_size", type=tuple, default=(320,320,3), 
+        parser.add_argument("-i", "--input_size", type=tuple, default=(224,224,3), 
                             help="Defines the input size")
         parser.add_argument("-lr", type=float, default=0.001, 
                             help="Defines the initial learning rate")
@@ -124,7 +134,7 @@ class FoodRecognitionOptions:
                             help="Min prediction depth")
         parser.add_argument("--max_depth", type=float, default=10.0, 
                             help="Max prediction depth")
-        parser.add_argument("--gt_depth_scale", type=float, default=0.35, 
+        parser.add_argument("--gt_depth_scale", type=float, default=0.65, 
                             help="Max prediction depth")
         parser.add_argument("--relax_param", type=float, default=0.1, 
                             help="Max prediction depth")
@@ -147,7 +157,10 @@ class FoodRecognitionOptions:
         f.depth_options.training_params.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
         f.depth_options.training_params.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
 
-        f.seg_options.training_params.model_weights_path = "model_files/seg_model_e18.hdf5"
-
+        # f.seg_options.training_params.model_weights_path =  "model_files/seg_model_e18.hdf5"
+        
+        # apples
+        f.seg_options.training_params.model_weights_path = "model_files/apple_model.hdf5"
+        
         return f
 

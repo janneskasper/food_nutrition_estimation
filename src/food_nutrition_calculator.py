@@ -19,7 +19,7 @@ class FoodNutritionCalculator:
         self.density_db = DensityDatabase(density_db_path)
 
         with open(nutrition_db_path, "r") as f:
-            print("Loading nutrition database ...")
+            print("[*] Loading nutrition database ...")
             self.nutrition_db: dict = json.load(f)
 
         self.classes = classes
@@ -36,16 +36,20 @@ class FoodNutritionCalculator:
         nutrition_scores = {}
         for k,v in volumes.items():
             if k in self.nutrition_db.keys():
-                entry = self.nutrition_db[k].copy()
+                entry = self.nutrition_db[k]
                 ref_weight = entry["reference_weight"]
                 density = self.density_db.query(k)[1] # 0 is the name in db and 1 is the density
-                print(f"{k} with density of {density} g/cm3")
                 weight = v * density
+                print(f"[*] Weight of {k} is {weight} g, reference weight is {ref_weight} g, density is {density} g/cm3")
                 nut_scores: dict = entry["scores"]
+                nutrition_scores[k] = {}
+                nutrition_scores[k]["predicted_weight"] = weight
+                nutrition_scores[k]["predicted_volume"] = v
+                nutrition_scores[k]["predicted_density"] = density
+                nutrition_scores[k]["nutritional_values"] = {}
                 for k_n, v_n in nut_scores.items():
-                    nut_scores[k_n] = v_n * (weight / ref_weight)
-                entry["predicted_weight"] = weight
-                nutrition_scores[k] = entry
+                    nutrition_scores[k]["nutritional_values"][k_n] = v_n * (weight / ref_weight)
+                
         return nutrition_scores
 
     def calculateScaling(self, input_img: np.ndarray,
@@ -87,9 +91,10 @@ class FoodNutritionCalculator:
         else:
             # Use the median ground truth depth scaling when not using
             # the plate contour
-            print('[*] No ellipse found. Scaling with expected median depth.')
             predicted_median_depth = np.median(1 / disparity_map)
             scaling = gt_depth_scale / predicted_median_depth
+            print('[*] No ellipse found. Scaling with expected median depth: ', scaling, 'from median depth: ', predicted_median_depth)
+        print('[*] Scaling factor:', scaling)
         return scaling
 
     def calculateVolume(self, input_img: np.ndarray, 
@@ -138,7 +143,6 @@ class FoodNutritionCalculator:
                                         point_cloud=point_cloud, 
                                         plate_diameter_prior=plate_diameter_prior, 
                                         gt_depth_scale=gt_depth_scale)
-       
         depth = scaling * depth
         point_cloud = scaling * point_cloud
         point_cloud_flat = scaling * point_cloud_flat
@@ -173,6 +177,7 @@ class FoodNutritionCalculator:
             # Estimate volume for points above the plane
             volume_points = object_points_transformed[object_points_transformed[:,2] > 0]
             estimated_volume, _ = pc_to_volume(volume_points)
-            estimated_volumes[self.classes[seg_class_index]] = estimated_volume
+            estimated_volumes[self.classes[seg_class_index]] = estimated_volume * 10e6 # convert to cm3
+            print(f"[*] Estimated volume for {self.classes[seg_class_index]}: {estimated_volume * 10e6} cm3")
 
         return estimated_volumes, scaling

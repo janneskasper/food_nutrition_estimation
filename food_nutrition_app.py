@@ -15,20 +15,22 @@ import cv2
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 class FoodColorScheme(IntEnum):
-    WATER=0,
-    SALAD=1,
-    BREAD=2,
-    TOMATO=3,
-    BUTTER=4,
-    CARROT=5,
-    RICE=6,
-    EGG=7,
-    APPLE=8,
-    JAM=9,
-    CUCUMBER=10,
-    BANANA=11,
-    CHEESE=12,
-    BACKGROUND=13
+    # WATER=0,
+    # SALAD=1,
+    # BREAD=2,
+    # TOMATO=3,
+    # BUTTER=4,
+    # CARROT=5,
+    # RICE=6,
+    # EGG=7,
+    # APPLE=8,
+    # JAM=9,
+    # CUCUMBER=10,
+    # BANANA=11,
+    # CHEESE=12,
+    # BACKGROUND=13
+    APPLE=0,
+    BACKGROUND=1
 
 
 
@@ -111,28 +113,29 @@ class FoodNutritionApp:
                                                                             plate_diameter_prior=plate_diameter)
         nut_scores_per_class = self.calculator.calculateNutrition(volumes_per_class)
 
-        depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map), scaling=scaling)
+        if self.visualize:
+            depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map), scaling=scaling)
 
-        combined_mask = prettySegmentation(mask_onehot, self.color_mapping)
-        
-        if self.visualize: prettyPlotting([img, depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
+            combined_mask = prettySegmentation(mask_onehot, self.color_mapping)
+            
+            prettyPlotting([img, depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
 
         return nut_scores_per_class
     
     def __getColorScheme(self):
-        self.color_mapping[FoodColorScheme.WATER] = (0, 0, 255)          
-        self.color_mapping[FoodColorScheme.SALAD] = (50, 205, 50)         
-        self.color_mapping[FoodColorScheme.BREAD] = (205, 133, 63)       
-        self.color_mapping[FoodColorScheme.TOMATO] = (255, 99, 71)        
-        self.color_mapping[FoodColorScheme.BUTTER] = (255, 255, 102)      
-        self.color_mapping[FoodColorScheme.CARROT] = (255, 165, 0)       
-        self.color_mapping[FoodColorScheme.RICE] = (255, 255, 224)       
-        self.color_mapping[FoodColorScheme.EGG] = (255, 255, 102)         
+        # self.color_mapping[FoodColorScheme.WATER] = (0, 0, 255)          
+        # self.color_mapping[FoodColorScheme.SALAD] = (50, 205, 50)         
+        # self.color_mapping[FoodColorScheme.BREAD] = (205, 133, 63)       
+        # self.color_mapping[FoodColorScheme.TOMATO] = (255, 99, 71)        
+        # self.color_mapping[FoodColorScheme.BUTTER] = (255, 255, 102)      
+        # self.color_mapping[FoodColorScheme.CARROT] = (255, 165, 0)       
+        # self.color_mapping[FoodColorScheme.RICE] = (255, 255, 224)       
+        # self.color_mapping[FoodColorScheme.EGG] = (255, 255, 102)         
         self.color_mapping[FoodColorScheme.APPLE] = (0, 255, 0)          
-        self.color_mapping[FoodColorScheme.JAM] = (165, 42, 42)          
-        self.color_mapping[FoodColorScheme.CUCUMBER] = (34, 139, 34)     
-        self.color_mapping[FoodColorScheme.BANANA] = (255, 255, 0)       
-        self.color_mapping[FoodColorScheme.CHEESE] = (255, 215, 0)       
+        # self.color_mapping[FoodColorScheme.JAM] = (165, 42, 42)          
+        # self.color_mapping[FoodColorScheme.CUCUMBER] = (34, 139, 34)     
+        # self.color_mapping[FoodColorScheme.BANANA] = (255, 255, 0)       
+        # self.color_mapping[FoodColorScheme.CHEESE] = (255, 215, 0)       
         self.color_mapping[FoodColorScheme.BACKGROUND] = (192, 192, 192) 
 
     def __processSegmentation(self, output):
@@ -212,7 +215,7 @@ def predictSegmentation():
 
 def run_app():
     global food_nutrition_app
-    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.create(), visualize=True)
+    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.create(), visualize=False)
     app.run(host="localhost", port=4333, debug=False)
 
 
