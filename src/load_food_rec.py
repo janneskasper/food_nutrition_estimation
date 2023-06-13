@@ -44,7 +44,7 @@ class CocoDatasetGenerator:
             filter_categories (list, optional): List of category names to use. Uses all if None. Defaults to None.
             data_size (tuple, optional): The size of the generator output images and masks. Defaults to (455,455).
         """
-        assert os.path.isfile(annotations_path), f"Provided path for train annotations is invalid!"
+        assert os.path.isfile(annotations_path), f"Provided path ({annotations_path}) for train annotations is invalid!"
         self.annotations_path = annotations_path
         self.img_dir = img_dir
         self.data_size = data_size

@@ -25,9 +25,8 @@ def getSegmentationModel(config: ModelConfig, lr=0.001):
     
     optim = keras.optimizers.Adam(lr=lr)
 
-    weights_path = os.path.join(os.getcwd(), config.model_weights_path)
-
-    if weights_path is not None:
+    if config.model_weights_path is not None:
+        weights_path = os.path.join(os.getcwd(), config.model_weights_path)
         assert os.path.isfile(weights_path), f"Loading segmentation model weights: file not found!"
         model.load_weights(weights_path)
 

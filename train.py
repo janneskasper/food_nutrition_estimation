@@ -1,6 +1,6 @@
-from load_food_rec import CocoDatasetGenerator, CocoDatasetLoader
-from food_recognition_options import TrainingConfig
-from models.model_factory import getSegmentationModel
+from src.load_food_rec import CocoDatasetGenerator, CocoDatasetLoader
+from src.food_recognition_options import TrainingConfig
+from src.models.model_factory import getSegmentationModel
 import segmentation_models as sm
 import keras
 import os
@@ -67,6 +67,6 @@ def train(options: TrainingConfig):
 
 
 if __name__ == "__main__":
-    train(TrainingConfig())
+    train(TrainingConfig.createTrainConfig())
 
 

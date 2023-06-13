@@ -88,6 +88,25 @@ class TrainingConfig:
         self.val_img_path = args.val_img
         self.test_img_path = "./"
 
+    @staticmethod
+    def createTrainConfig():
+        opt = TrainingConfig()
+
+        opt.train_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json")
+        opt.train_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/images")
+        opt.val_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json")
+        opt.val_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images")
+
+        opt.model_options.classes = [
+                                    'bread-white',
+                                    'butter',
+                                    'carrot-raw',
+                                    'apple', 
+                                    'jam', 
+                                    'banana'
+                                    ]
+        return opt
+
     def __parse_args(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("-w", "--workers", type=int, default=8, 
@@ -118,39 +137,6 @@ class TrainingConfig:
                             help="Path to training image dir")
 
         return parser.parse_args()
-
-
-class ModelConfig:
-
-    def __init__(self, args) -> None:
-        self.model_backbone = args.backbone
-        self.model_weights_path = None
-        self.model_path_json = None
-        self.input_size = args.input_size
-        self.classes = []
-
-
-class SegmentationOptions:
-    
-    def __init__(self, args) -> None:        
-        self.model_config = ModelConfig(args)
-
-        self.relax_param = args.relax_param
-
-        self.color_mapping = COLOR_MAPPING
-
-
-class DepthEstimationOptions:
-
-    def __init__(self, args) -> None:
-        self.model_config = ModelConfig(args)
-
-        self.min_depth = args.min_depth
-        self.max_depth = args.max_depth
-        self.min_disp = 1.0 / args.min_depth 
-        self.max_disp = 1.0 / args.max_depth
-        self.gt_depth_scale = args.gt_depth_scale
-        self.fov = args.fov
 
 
 class FoodRecognitionOptions:
@@ -193,37 +179,45 @@ class FoodRecognitionOptions:
         
         opt.seg_options.model_config.model_weights_path = "model_files/seg_model_e18.hdf5"
 
-        opt.seg_options.model_config.classes = ['water',
-                                                'salad-leaf-salad-green',
+        opt.seg_options.model_config.classes = [
                                                 'bread-white',
-                                                'tomato-raw',
                                                 'butter',
                                                 'carrot-raw',
-                                                'rice', 
-                                                'egg', 
                                                 'apple', 
                                                 'jam', 
-                                                'cucumber', 
-                                                'banana', 
-                                                'cheese']
+                                                'banana'
+                                                ]
         return opt
-    
-    @staticmethod
-    def createTrainConfig():
-        opt = TrainingConfig()
 
-        opt.model_options.classes = ['water',
-                                    'salad-leaf-salad-green',
-                                    'bread-white',
-                                    'tomato-raw',
-                                    'butter',
-                                    'carrot-raw',
-                                    'rice', 
-                                    'egg', 
-                                    'apple', 
-                                    'jam', 
-                                    'cucumber', 
-                                    'banana', 
-                                    'cheese'
-                                    ]
-        return opt
+
+class ModelConfig:
+
+    def __init__(self, args) -> None:
+        self.model_backbone = args.backbone
+        self.model_weights_path = None
+        self.model_path_json = None
+        self.input_size = args.input_size
+        self.classes = []
+
+
+class SegmentationOptions:
+    
+    def __init__(self, args) -> None:        
+        self.model_config = ModelConfig(args)
+
+        self.relax_param = args.relax_param
+
+        self.color_mapping = COLOR_MAPPING
+
+
+class DepthEstimationOptions:
+
+    def __init__(self, args) -> None:
+        self.model_config = ModelConfig(args)
+
+        self.min_depth = args.min_depth
+        self.max_depth = args.max_depth
+        self.min_disp = 1.0 / args.min_depth 
+        self.max_disp = 1.0 / args.max_depth
+        self.gt_depth_scale = args.gt_depth_scale
+        self.fov = args.fov
