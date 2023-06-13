@@ -2,20 +2,30 @@ import cv2
 import requests
 import json
 import sys
+import os
 import base64
 from PIL import Image
 import io
 import numpy as np
 import os
 
-def test_run(img_path, size=(224,224), type="seg"):
+def encode_image(img_path, size=(224,224)):
     im = Image.open(img_path)
     im = im.resize(size)
 
     img_byte_arr = io.BytesIO()
     im.save(img_byte_arr, format="PNG")
     img_byte_arr = img_byte_arr.getvalue()
-    encoded_string = base64.b64encode(img_byte_arr).decode("utf-8")           
+    encoded_string = base64.b64encode(img_byte_arr).decode("utf-8") 
+
+    return encoded_string   
+
+
+def test_run(img_path, size=(224,224), type="seg"):
+    if isinstance(img_path, str):
+        encoded_string = [encode_image(img_path, size=size)]
+    elif isinstance(img_path, list):
+        encoded_string = [encode_image(e, size=size) for e in img_path]
         
     if type == "seg":
         data = requests.post("http://localhost:4333/predict/segmentation", json=json.dumps({"img": encoded_string, "plate_diameter": 0.422}),)
@@ -67,8 +77,9 @@ if __name__ == "__main__":
         # test_img = f"{os.getcwd()}/../datasets/filtered/tomato-raw_salad-leaf-salad-green_0.jpg"
         # test_img = f"{os.getcwd()}/../datasets/filtered/salad-leaf-salad-green_25.jpg"
         # test_img = f"{os.getcwd()}/../datasets/filtered/rice_example.jpg"
+        test_img = ["data/test_images/noplate/"+ path for path in os.listdir("data/test_images/noplate")]
         # test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
-        test_img = "data/test_images/plate25cm/applered2.jpg"
+        # test_img = "data/test_images/plate25cm/applered2.jpg"
     
     # test_run(test_img, type="seg")
     # test_run(test_img, type="depth")

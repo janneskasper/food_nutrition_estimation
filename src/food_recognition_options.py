@@ -177,6 +177,8 @@ class FoodRecognitionOptions:
                             help="Defines the input size")
         parser.add_argument("--backbone", type=str, default="resnet18", 
                             help="Defines the model backbone")
+        parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
+                            help="Path to segmentation model weights")
         return parser.parse_args()
 
     @staticmethod
@@ -185,15 +187,15 @@ class FoodRecognitionOptions:
         opt.depth_options.model_config.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
         opt.depth_options.model_config.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
         
-        opt.seg_options.model_config.model_weights_path = "model_files/seg_model_e18.hdf5"
+        print("[*] Loading segmentation model from: ", opt.seg_options.model_config.model_weights_path)
 
         opt.seg_options.model_config.classes = [
-                                                'bread-white',
-                                                'butter',
-                                                'carrot-raw',
+                                                # 'bread-white',
+                                                # 'butter',
+                                                # 'carrot-raw',
                                                 'apple', 
-                                                'jam', 
-                                                'banana'
+                                                # 'jam', 
+                                                # 'banana'
                                                 ]
         return opt
 
@@ -202,7 +204,7 @@ class ModelConfig:
 
     def __init__(self, args) -> None:
         self.model_backbone = args.backbone
-        self.model_weights_path = None
+        self.model_weights_path = args.weights
         self.model_path_json = None
         self.input_size = args.input_size
         self.classes = []
@@ -217,6 +219,7 @@ class SegmentationOptions:
         self.model_config = ModelConfig(args)
 
         self.relax_param = args.relax_param
+        self.weights = args.weights
 
         self.color_mapping = COLOR_MAPPING
 
