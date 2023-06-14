@@ -20,7 +20,7 @@ class FoodNutritionApp:
         self.calculator = FoodNutritionCalculator(os.path.join(options.base_path, options.nut_db), 
                                                   os.path.join(options.base_path, options.density_db), 
                                                   options.seg_options.model_config.classes)
-        self.visualize = visualize
+        self.visualize = options.seg_options.visualize
         self.seg_model = getSegmentationModel(config=options.seg_options.model_config)
         self.depth_model = getDepthEstimationModel(config=options.depth_options.model_config)
         self.options = options
@@ -189,7 +189,7 @@ def predictSegmentation():
 
 def run_app():
     global food_nutrition_app
-    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.createRunConfig(), visualize=True)
+    food_nutrition_app = FoodNutritionApp(FoodRecognitionOptions.createRunConfig())
     app.run(host="localhost", port=4333, debug=False)
 
 

@@ -64,6 +64,7 @@ def test_run(img_path, size=(224,224), type="seg"):
                 print(e, flush=True)
                 return
             print(content)
+            return content
 
 
 if __name__ == "__main__":
@@ -77,10 +78,26 @@ if __name__ == "__main__":
         # test_img = f"{os.getcwd()}/../datasets/filtered/tomato-raw_salad-leaf-salad-green_0.jpg"
         # test_img = f"{os.getcwd()}/../datasets/filtered/salad-leaf-salad-green_25.jpg"
         # test_img = f"{os.getcwd()}/../datasets/filtered/rice_example.jpg"
-        test_img = ["data/test_images/noplate/"+ path for path in os.listdir("data/test_images/noplate")]
+        test_img = ["data/test_images/plate20cm/"+ path for path in os.listdir("data/test_images/plate20cm")]
         # test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
         # test_img = "data/test_images/plate25cm/applered2.jpg"
     
     # test_run(test_img, type="seg")
     # test_run(test_img, type="depth")
-    test_run(test_img, type="nut")
+    content = test_run(test_img, type="nut")
+    if content and isinstance(content, list):
+        avg_nutrition = {}
+        for food_result in content:
+            for food_type in content.keys():
+                if food_type not in avg_nutrition.keys():
+                    avg_nutrition[food_type] = {}
+                for k,v in food_result[food_type]["nutritional_values"].items():
+                    if k not in avg_nutrition[food_type].keys():
+                        avg_nutrition[food_type][k] = 0
+                    avg_nutrition[food_type][k] += v
+        
+        for k,v in avg_nutrition.items():
+            for k1,v1 in v.items():
+                avg_nutrition[k][k1] = v1 / len(content)
+
+        print(avg_nutrition)

@@ -179,6 +179,7 @@ class FoodRecognitionOptions:
                             help="Defines the model backbone")
         parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
                             help="Path to segmentation model weights")
+        parser.add_argument("--visualize", type=bool, default=False)
         return parser.parse_args()
 
     @staticmethod
@@ -220,6 +221,7 @@ class SegmentationOptions:
 
         self.relax_param = args.relax_param
         self.weights = args.weights
+        self.visualize = args.visualize
 
         self.color_mapping = COLOR_MAPPING
 
