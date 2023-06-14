@@ -100,11 +100,6 @@ class TrainingConfig:
     def createTrainConfig():
         opt = TrainingConfig()
 
-        opt.train_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json")
-        opt.train_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/images")
-        opt.val_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json")
-        opt.val_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images")
-
         opt.model_options.classes = [
                                     'bread-white',
                                     'butter',
@@ -135,14 +130,20 @@ class TrainingConfig:
                             help="Defines the training number of epochs")
         parser.add_argument("--log_dir", type=str, default="./tmp", 
                             help="Defines where the checkpoints and ouputs are stored")
-        parser.add_argument("-ta", "--train_ann", type=str, default="./",
+        parser.add_argument("-ta", "--train_ann", type=str, 
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json"),
                             help="Path to training annotations")
-        parser.add_argument("-ti", "--train_img", type=str, default="./",
+        parser.add_argument("-ti", "--train_img", type=str, 
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/images"),
                             help="Path to training image dir")
-        parser.add_argument("-va", "--val_ann", type=str, default="./",
+        parser.add_argument("-va", "--val_ann", type=str, 
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json"),
                             help="Path to validation annotations")
-        parser.add_argument("-vi", "--val_img", type=str, default="./",
+        parser.add_argument("-vi", "--val_img", type=str, 
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images"),
                             help="Path to training image dir")
+        parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
+                            help="Path to segmentation model weights")
 
         return parser.parse_args()
 
@@ -187,6 +188,8 @@ class FoodRecognitionOptions:
         opt = FoodRecognitionOptions()
         opt.depth_options.model_config.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
         opt.depth_options.model_config.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
+
+        opt.seg_options.model_config.model_weights_path = opt.seg_options.weights
         
         print("[*] Loading segmentation model from: ", opt.seg_options.model_config.model_weights_path)
 
@@ -205,7 +208,7 @@ class ModelConfig:
 
     def __init__(self, args) -> None:
         self.model_backbone = args.backbone
-        self.model_weights_path = args.weights
+        self.model_weights_path = None
         self.model_path_json = None
         self.input_size = args.input_size
         self.classes = []
