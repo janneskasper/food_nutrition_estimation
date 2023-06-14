@@ -29,6 +29,8 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+COUNTER = 0
+
 def prettySegmentation(one_hot_mask: np.ndarray, classes: list, color_scheme: dict):
     """ Combines one hot encoded segmentation mask based on a color scheme.
 
@@ -56,6 +58,7 @@ def prettyPlotting(imgs, tiling, titles, suptitle=None):
         titles: List of subplot titles.
         suptitle: Suptitle above all plots.
     """
+    global COUNTER
     n_plots = len(imgs)
     rows = str(tiling[0])
     cols = str(tiling[1])
@@ -67,7 +70,10 @@ def prettyPlotting(imgs, tiling, titles, suptitle=None):
 
     if suptitle is not None:
         fig.suptitle(suptitle)
-    plt.show()
+    # plt.show()
+    plt.savefig("data/gif/{}.png".format(COUNTER))
+    plt.close()
+    COUNTER += 1
 
 def inverse_warp(img, depth, pose_vector, intrinsic_mat, intrinsic_mat_inv):
     """Inverse warp a source image to the target image plane.

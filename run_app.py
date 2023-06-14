@@ -17,9 +17,7 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 class FoodNutritionApp:
 
     def __init__(self, options: FoodRecognitionOptions, visualize=False) -> None:
-        self.calculator = FoodNutritionCalculator(os.path.join(options.base_path, options.nut_db), 
-                                                  os.path.join(options.base_path, options.density_db), 
-                                                  options.seg_options.model_config.classes)
+        self.calculator = FoodNutritionCalculator(options)
         self.visualize = options.seg_options.visualize
         self.seg_model = getSegmentationModel(config=options.seg_options.model_config)
         self.depth_model = getDepthEstimationModel(config=options.depth_options.model_config)
@@ -97,15 +95,9 @@ class FoodNutritionApp:
                                                                                 fov=self.options.depth_options.fov, 
                                                                                 gt_depth_scale=self.options.depth_options.gt_depth_scale,
                                                                                 relaxation_param=self.options.seg_options.relax_param,
-                                                                                plate_diameter_prior=plate_diameter)
+                                                                                plate_diameter_prior=plate_diameter, visualize=self.visualize)
             nut_scores_per_class.append(self.calculator.calculateNutrition(volumes_per_class))
 
-            if self.visualize:
-                depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map[i,:,:,0]), scaling=scaling)
-
-                combined_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
-                
-                prettyPlotting([img_batch[i], depth, disparity_map, combined_mask], (2,2), ['Input Image','Depth', 'Disparity Map', 'Combined Mask'], 'Estimated Depth')
 
         return nut_scores_per_class
 
