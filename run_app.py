@@ -21,7 +21,7 @@ class FoodNutritionApp:
                                                   os.path.join(options.base_path, options.density_db), 
                                                   options.seg_options.model_config.classes)
         self.visualize = visualize
-        self.seg_model = getSegmentationModel(config=options.seg_options.model_config)
+        self.seg_model = getSegmentationModel(config=options.seg_options.model_config, training=False, name_filter=None)
         self.depth_model = getDepthEstimationModel(config=options.depth_options.model_config)
         self.options = options
         self.depth_options = options.depth_options

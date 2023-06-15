@@ -82,6 +82,7 @@ class TrainingConfig:
         self.steps_epoch = int(args.steps_epoch)
         self.epochs = int(args.epochs)
         self.workers = int(args.workers)
+        self.class_weights = None
 
         self.log_dir = args.log_dir
         self.train_ann_path = args.train_ann
@@ -105,43 +106,62 @@ class TrainingConfig:
         opt.val_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json")
         opt.val_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images")
 
+        opt.epochs = 1
+        opt.lr = 0.001
+        opt.lrd = 0.0001
+
+        opt.model_options.model_weights_path = None
+
         opt.model_options.classes = [
                                     'bread-white',
-                                    'butter',
-                                    'carrot-raw',
                                     'apple', 
-                                    'jam', 
-                                    'banana'
+                                    'carrot-raw',
                                     ]
+        
+        opt.model_options.model_backbone = "resnet18"
+        opt.model_options.model = "unet"
+
         return opt
 
     def __parse_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("-w", "--workers", type=int, default=8, 
+        parser.add_argument("-w", "--workers", type=int, 
+                            default=8, 
                             help="Defines the number of training workers")
-        parser.add_argument("-b", "--batch_size", type=int, default=32, 
+        parser.add_argument("-b", "--batch_size", type=int, 
+                            default=32, 
                             help="Defines the training batch size")
-        parser.add_argument("-i", "--input_size", type=tuple, default=(224,224,3), 
+        parser.add_argument("-i", "--input_size", type=tuple, 
+                            default=(224,224,3), 
                             help="Defines the input size")
-        parser.add_argument("-lr", type=float, default=0.001, 
+        parser.add_argument("-lr", type=float, 
+                            default=0.001, 
                             help="Defines the initial learning rate")
-        parser.add_argument("-lrd", type=float, default=0.00001, 
+        parser.add_argument("-lrd", type=float, 
+                            default=0.000001, 
                             help="Defines the learning rate decay")
-        parser.add_argument("--backbone", type=str, default="resnet18", 
+        parser.add_argument("--backbone", type=str, 
+                            default="resnet18", 
                             help="Defines the model backbone")
-        parser.add_argument("-s", "--steps_epoch", type=int, default=200, 
+        parser.add_argument("-s", "--steps_epoch", type=int, 
+                            default=100, 
                             help="Defines the training steps per epoch")
-        parser.add_argument("-e", "--epochs", type=int, default=50, 
+        parser.add_argument("-e", "--epochs", type=int, 
+                            default=50, 
                             help="Defines the training number of epochs")
         parser.add_argument("--log_dir", type=str, default="./tmp", 
                             help="Defines where the checkpoints and ouputs are stored")
-        parser.add_argument("-ta", "--train_ann", type=str, default="./",
+        parser.add_argument("-ta", "--train_ann", type=str, 
+                            default="./",
                             help="Path to training annotations")
-        parser.add_argument("-ti", "--train_img", type=str, default="./",
+        parser.add_argument("-ti", "--train_img", type=str, 
+                            default="./",
                             help="Path to training image dir")
-        parser.add_argument("-va", "--val_ann", type=str, default="./",
+        parser.add_argument("-va", "--val_ann", type=str, 
+                            default="./",
                             help="Path to validation annotations")
-        parser.add_argument("-vi", "--val_img", type=str, default="./",
+        parser.add_argument("-vi", "--val_img", type=str, 
+                            default="./",
                             help="Path to training image dir")
 
         return parser.parse_args()
@@ -185,15 +205,12 @@ class FoodRecognitionOptions:
         opt.depth_options.model_config.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
         opt.depth_options.model_config.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
         
-        opt.seg_options.model_config.model_weights_path = "model_files/seg_model_e18.hdf5"
+        opt.seg_options.model_config.model_weights_path = "tmp/train_20230615-152539/final_model.hdf5"
 
         opt.seg_options.model_config.classes = [
-                                                'bread-white',
-                                                'butter',
-                                                'carrot-raw',
-                                                'apple', 
-                                                'jam', 
-                                                'banana'
+                                                "carrot-raw",
+                                                "apple",
+                                                "bread-white"
                                                 ]
         return opt
 
@@ -202,6 +219,7 @@ class ModelConfig:
 
     def __init__(self, args) -> None:
         self.model_backbone = args.backbone
+        self.model = None
         self.model_weights_path = None
         self.model_path_json = None
         self.input_size = args.input_size

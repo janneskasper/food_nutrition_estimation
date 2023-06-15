@@ -1,4 +1,5 @@
 # Directories to ignore
+*tmp/
 datasets/*
 datasets/EPIC_KITCHENS_2018/*
 datasets/food_videos_dataset/*

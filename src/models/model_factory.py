@@ -6,22 +6,29 @@ import json
 from src.food_recognition_options import ModelConfig
 from src.models.custom_modules import *
 
-def getSegmentationModel(config: ModelConfig, lr=0.001):
+def getSegmentationModel(config: ModelConfig, lr=0.001, training=False, name_filter=None):
     print("[*] Loading food segmentation model ...")
 
     num_classes = len(config.classes) + 1 # + 1 for adding background
 
-    model: keras.models.Model = sm.Unet(config.model_backbone, 
+    if config.model == "unet":
+        model: keras.models.Model = sm.Unet(config.model_backbone, 
                                         encoder_weights="imagenet", 
-                                        # input_shape=options.input_size, 
+                                        input_shape=config.input_size, 
                                         classes=num_classes)
+    elif config.model == "fpn":
+        model: keras.models.Model = sm.FPN(config.model_backbone,
+                                           encoder_weights="imagenet",
+                                           input_shape=config.input_size,
+                                           classes=num_classes)
+    else:
+        return None
     
-    dice_loss = sm.losses.DiceLoss(class_indexes=np.arange(len(config.classes))) # last class is the background we want to ignore
-    focal_loss = sm.losses.BinaryFocalLoss() if config.classes == 1 else sm.losses.CategoricalFocalLoss(class_indexes=np.arange(len(config.classes)))
-    total_loss = dice_loss + focal_loss
+    loss = sm.losses.CategoricalCELoss(class_indexes=np.arange(len(config.classes))) + sm.losses.DiceLoss(class_indexes=np.arange(len(config.classes)))
 
     metrics = [sm.metrics.IOUScore(threshold=0.5, class_indexes=np.arange(len(config.classes))), 
-               sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(config.classes)))]
+               sm.metrics.FScore(threshold=0.5, class_indexes=np.arange(len(config.classes)))
+               ]
     
     optim = keras.optimizers.Adam(lr=lr)
 
@@ -30,7 +37,9 @@ def getSegmentationModel(config: ModelConfig, lr=0.001):
         assert os.path.isfile(weights_path), f"Loading segmentation model weights: file not found!"
         model.load_weights(weights_path)
 
-    model.compile(optimizer=optim, loss=total_loss, metrics=metrics)
+    __set_weights_trainable(model, trainable=training, name_filter=name_filter)
+
+    model.compile(optimizer=optim, loss=loss, metrics=metrics)
     return model
 
 def getDepthEstimationModel(config: ModelConfig):
@@ -61,7 +70,7 @@ def getDepthEstimationModel(config: ModelConfig):
                                 name='depth_model')
     return depth_model
 
-def __set_weights_trainable(model, trainable):
+def __set_weights_trainable(model, trainable, name_filter=None):
     """Sets model weights to trainable/non-trainable.
 
     Inputs:
@@ -69,6 +78,12 @@ def __set_weights_trainable(model, trainable):
         trainable: Trainability flag.
     """
     for layer in model.layers:
-        layer.trainable = trainable
+        if name_filter is not None:
+            if  name_filter in layer.name:
+                layer.trainable = trainable
+            else:
+                layer.trainable = not trainable
+        else:
+            layer.trainable = trainable
         if isinstance(layer, keras.models.Model):
-            __set_weights_trainable(layer, trainable)
+            __set_weights_trainable(layer, trainable, name_filter)
