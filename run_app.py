@@ -39,7 +39,7 @@ class FoodNutritionApp:
 
         depth, disparity_map = self.__processDepthPrediction(np.array(inv_disp_map), None)
 
-        if self.visualize: prettyPlotting([img, depth], (2,1), ['Input Image','Depth'], 'Estimated Depth')
+        if self.visualize: prettyPlotting([img, depth], (2,1), ['Input Image','Depth'], self.options.output_dir, 'Estimated Depth')
 
         # Return values
         return_vals = {
@@ -58,7 +58,7 @@ class FoodNutritionApp:
 
         pretty_mask = prettySegmentation(mask_onehot, self.segment_options.model_config.classes, self.segment_options.color_mapping)
 
-        if self.visualize: prettyPlotting([img, pretty_mask], (2,1), ['Input Image','Combined Mask'], 'Food Segmentation')
+        if self.visualize: prettyPlotting([img, pretty_mask], (2,1), ['Input Image','Combined Mask'], self.options.output_dir, 'Food Segmentation')
 
         return_vals = {
             "combined_mask": self.__encodeImage(pretty_mask)
@@ -67,21 +67,26 @@ class FoodNutritionApp:
     
     def predictNutrition(self, data: requests.Request):
         images, plate_diameter = self.__getData(data=data)
-        imag_batch = []
-        imag_d_batch = []
+        image_batch = []
+        image_depth_batch = []
+        image_segmentation_batch = []
         for img in images:
-            img_d = cv2.resize(img, (224,128))
-            img_d = cv2.cvtColor(img_d, cv2.COLOR_BGR2RGB) / 255
-            imag_batch.append(img)
-            imag_d_batch.append(img_d)
+            img_resized = cv2.resize(img, (self.options.depth_options.model_config.input_size[1],
+                                   self.options.depth_options.model_config.input_size[0]))
+            img_correct_color = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB) / 255
 
-        img_batch = np.array(imag_batch)
-        img_d_batch = np.array(imag_d_batch)
+            image_batch.append(img_resized)
+            image_depth_batch.append(img_correct_color)
+            image_segmentation_batch.append(img)
+
+        image_batch = np.array(image_batch)
+        image_depth_batch = np.array(image_depth_batch)
+        image_segmentation_batch = np.array(image_segmentation_batch)
 
         # Predict segmentation and depth of batch
         with self.graph.as_default():
-            seg_masks = self.seg_model.predict(img_batch)
-            inv_disp_map = self.depth_model.predict(img_d_batch, batch_size=1)[0]
+            seg_masks = self.seg_model.predict(image_segmentation_batch)
+            inv_disp_map = self.depth_model.predict(image_depth_batch, batch_size=1)[0]
 
         # For all images in batch, predict nutrition
         nut_scores_per_class = []
@@ -91,7 +96,7 @@ class FoodNutritionApp:
             mask_onehot = self.__processSegmentation(seg_masks[i])
 
             with self.graph.as_default():
-                volumes_per_class, scaling = self.calculator.calculateVolume(img_batch[i], mask_onehot, disparity_map, 
+                volumes_per_class, scaling = self.calculator.calculateVolume(image_batch[i], mask_onehot, disparity_map, 
                                                                                 fov=self.options.depth_options.fov, 
                                                                                 gt_depth_scale=self.options.depth_options.gt_depth_scale,
                                                                                 relaxation_param=self.options.seg_options.relax_param,

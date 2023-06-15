@@ -64,7 +64,10 @@ class FoodNutritionCalculator:
         # Find ellipse parameterss (cx, cy, a, b, theta) that 
         # describe the plate contour
         ellipse_scale = 2
-        ellipse_detector = EllipseDetector(input_shape=input_img.shape)
+        ellipse_detector = EllipseDetector((
+            ellipse_scale * self.options.depth_options.model_config.input_size[0],
+            ellipse_scale * self.options.depth_options.model_config.input_size[1]
+        ))
         ellipse_params = ellipse_detector.detect(input_img)
         ellipse_params_scaled = tuple([x / ellipse_scale for x in ellipse_params[:-1]] + [ellipse_params[-1]])
 
@@ -239,6 +242,7 @@ class FoodNutritionCalculator:
                         (2,2),
                         ['Input Image', 'Plate Contour', 'Depth', 
                             'Object Mask'],
+                        self.options.output_dir,
                         'Estimated Volume: {:.3f} ml'.format(
                         estimated_volume))
 

@@ -24,12 +24,12 @@ Taken from:
 Modified by Alexander Graikos
 """
 
+import os
 from absl import logging
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
-
-COUNTER = 0
+import time
 
 def prettySegmentation(one_hot_mask: np.ndarray, classes: list, color_scheme: dict):
     """ Combines one hot encoded segmentation mask based on a color scheme.
@@ -49,7 +49,7 @@ def prettySegmentation(one_hot_mask: np.ndarray, classes: list, color_scheme: di
         pretty_mask[m] = color_scheme[class_i]
     return pretty_mask
 
-def prettyPlotting(imgs, tiling, titles, suptitle=None):
+def prettyPlotting(imgs, tiling, titles, dir="out", suptitle=None):
     """Plot images in a pretty grid.
 
     Inputs:
@@ -58,7 +58,9 @@ def prettyPlotting(imgs, tiling, titles, suptitle=None):
         titles: List of subplot titles.
         suptitle: Suptitle above all plots.
     """
-    global COUNTER
+    if not os.path.isdir(dir):
+        os.makedirs(dir)
+
     n_plots = len(imgs)
     rows = str(tiling[0])
     cols = str(tiling[1])
@@ -71,9 +73,8 @@ def prettyPlotting(imgs, tiling, titles, suptitle=None):
     if suptitle is not None:
         fig.suptitle(suptitle)
     # plt.show()
-    plt.savefig("data/gif/{}.png".format(COUNTER))
+    plt.savefig("{}/{}.png".format(dir,time.strftime("%Y%m%d-%H%M%S")))
     plt.close()
-    COUNTER += 1
 
 def inverse_warp(img, depth, pose_vector, intrinsic_mat, intrinsic_mat_inv):
     """Inverse warp a source image to the target image plane.

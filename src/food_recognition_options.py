@@ -156,6 +156,8 @@ class FoodRecognitionOptions:
 
         self.seg_options = SegmentationOptions(args)
         self.depth_options = DepthEstimationOptions(args)
+
+        self.output_dir = args.output_dir
         
         self.nut_db: str="data/nutrition_db.json"
         self.density_db: str="data/density_db.xlsx"
@@ -174,13 +176,16 @@ class FoodRecognitionOptions:
                             help="Ground truth for depth scaling")
         parser.add_argument("--relax_param", type=float, default=0.1, 
                             help="Relaxation parameter")
-        parser.add_argument("-i", "--input_size", type=tuple, default=(224,224,3), 
+        parser.add_argument("-i", "--input_size", type=tuple, default=(128,224,3), 
                             help="Defines the input size")
         parser.add_argument("--backbone", type=str, default="resnet18", 
                             help="Defines the model backbone")
         parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
                             help="Path to segmentation model weights")
-        parser.add_argument("--visualize", action='store_true')
+        parser.add_argument("--visualize", action='store_true',
+                            help="Visualize intermediate results")
+        parser.add_argument("--output_dir", type=str, default="output",
+                            help="Path to directory to store output images")
         return parser.parse_args()
 
     @staticmethod
