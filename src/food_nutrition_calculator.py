@@ -3,7 +3,7 @@ import json
 from src.density_db import DensityDatabase
 from src.ellipse_detection.ellipse_detector import EllipseDetector
 from src.point_cloud_utils import sor_filter, pca_plane_estimation, align_plane_with_axis, pc_to_volume
-from src.utils import get_cloud, _create_intrinsics_matrix
+from src.utils import get_cloud, _create_intrinsics_matrix, prettyPlotting, prettySegmentation
 import numpy as np
 import keras.backend as K
 import cv2
@@ -12,7 +12,11 @@ import pandas as pd
 
 class FoodNutritionCalculator:
 
-    def __init__(self, nutrition_db_path: str, density_db_path: str, classes: list) -> None:
+    def __init__(self, options) -> None:
+        self.options = options
+        nutrition_db_path = os.path.join(options.base_path, options.nut_db)
+        density_db_path = os.path.join(options.base_path, options.density_db)
+        classes = options.seg_options.model_config.classes
         assert os.path.isfile(nutrition_db_path), "Did not find DB nutrition file"
         assert os.path.isfile(density_db_path), "Did not find DB density file"
 
@@ -60,13 +64,15 @@ class FoodNutritionCalculator:
         # Find ellipse parameterss (cx, cy, a, b, theta) that 
         # describe the plate contour
         ellipse_scale = 2
-        ellipse_detector = EllipseDetector(input_shape=input_img.shape)
+        ellipse_detector = EllipseDetector((
+            ellipse_scale * self.options.depth_options.model_config.input_size[0],
+            ellipse_scale * self.options.depth_options.model_config.input_size[1]
+        ))
         ellipse_params = ellipse_detector.detect(input_img)
         ellipse_params_scaled = tuple([x / ellipse_scale for x in ellipse_params[:-1]] + [ellipse_params[-1]])
 
         # Scale depth map
         if point_cloud is not None and (any(x != 0 for x in ellipse_params_scaled) and plate_diameter_prior != 0):
-            print('[*] Ellipse parameters:', ellipse_params_scaled)
             # Find the scaling factor to match prior 
             # and measured plate diameters
             plate_point_1 = [int(ellipse_params_scaled[2] 
@@ -88,14 +94,18 @@ class FoodNutritionCalculator:
             plate_diameter = np.linalg.norm(plate_point_1_3d 
                                             - plate_point_2_3d)
             scaling = plate_diameter_prior / plate_diameter
+            print('[*] Ellipse parameters:', ellipse_params_scaled, 'Plate diameter:', plate_diameter)
         else:
             # Use the median ground truth depth scaling when not using
             # the plate contour
             predicted_median_depth = np.median(1 / disparity_map)
             scaling = gt_depth_scale / predicted_median_depth
-            print('[*] No ellipse found. Scaling with expected median depth: ', scaling, 'from median depth: ', predicted_median_depth)
+            print('[*] No ellipse found. Scaling with expected median depth: ', predicted_median_depth)
+            ellipse_params_scaled = (0, 0, 0, 0, 0)
+            plate_point_1 = (0, 0)
+            plate_point_2 = (0, 0)
         print('[*] Scaling factor:', scaling)
-        return scaling
+        return scaling, ellipse_params_scaled, plate_point_1, plate_point_2
 
     def calculateVolume(self, input_img: np.ndarray, 
                         segmentation_prediction: np.ndarray, 
@@ -103,7 +113,8 @@ class FoodNutritionCalculator:
                         fov=70, 
                         relaxation_param=1.0,
                         plate_diameter_prior=0.3, 
-                        gt_depth_scale=1.0):
+                        gt_depth_scale=1.0,
+                        visualize=False):
         """ Calculates the volume for the given input. 
 
         Args:
@@ -120,6 +131,8 @@ class FoodNutritionCalculator:
         assert segmentation_prediction.shape[-1] == len(self.classes) + 1, f"Classes don't match the segmentation prediction {len(self.classes)+1}:{segmentation_prediction.shape[2]}"
 
         tmp = np.zeros((disparity_map.shape[0], disparity_map.shape[1], segmentation_prediction.shape[2]))
+
+        mask_onehot = segmentation_prediction.copy()
 
         if segmentation_prediction.shape[-1] != disparity_map.shape[-1]:
             for i in range(segmentation_prediction.shape[-1]):
@@ -138,11 +151,12 @@ class FoodNutritionCalculator:
         point_cloud = K.eval(get_cloud(depth_tensor, intrinsics_inv_tensor))
         point_cloud_flat = np.reshape(point_cloud, (point_cloud.shape[1] * point_cloud.shape[2], 3))
 
-        scaling = self.calculateScaling(input_img=input_img, 
-                                        disparity_map=disparity_map, 
-                                        point_cloud=point_cloud, 
-                                        plate_diameter_prior=plate_diameter_prior, 
-                                        gt_depth_scale=gt_depth_scale)
+        scaling, ellipse_params_scaled, plate_point_1, plate_point_2 = self.calculateScaling(
+                input_img=input_img, 
+                disparity_map=disparity_map, 
+                point_cloud=point_cloud, 
+                plate_diameter_prior=plate_diameter_prior, 
+                gt_depth_scale=gt_depth_scale)
         depth = scaling * depth
         point_cloud = scaling * point_cloud
         point_cloud_flat = scaling * point_cloud_flat
@@ -178,6 +192,57 @@ class FoodNutritionCalculator:
             volume_points = object_points_transformed[object_points_transformed[:,2] > 0]
             estimated_volume, _ = pc_to_volume(volume_points)
             estimated_volumes[self.classes[seg_class_index]] = estimated_volume * 10e6 # convert to cm3
-            print(f"[*] Estimated volume for {self.classes[seg_class_index]}: {estimated_volume * 10e6} cm3")
+            print(f"[*] Estimated volume for {self.classes[seg_class_index]}: {estimated_volumes[self.classes[seg_class_index]]} cm3")
+
+            if visualize:
+                self.plotNutrition(ellipse_params_scaled, 
+                    plate_diameter_prior, 
+                    estimated_volumes[self.classes[seg_class_index]], 
+                    plate_point_1, plate_point_2, 
+                    mask_onehot,
+                    input_img, depth)
 
         return estimated_volumes, scaling
+    
+    def plotNutrition(self, ellipse_params_scaled, 
+                      plate_diameter_prior, 
+                      estimated_volume, 
+                      plate_point_1, 
+                      plate_point_2, 
+                      mask_onehot,
+                      img, depth):
+
+        # Outline the detected plate ellipse and major axis vertices 
+        plate_contour = np.copy(img)
+        if (any(x != 0 for x in ellipse_params_scaled) and
+            plate_diameter_prior != 0):
+            ellipse_color = (68 / 255, 1 / 255, 84 / 255)
+            vertex_color = (253 / 255, 231 / 255, 37 / 255)
+            cv2.ellipse(plate_contour,
+                        (int(ellipse_params_scaled[0]),
+                            int(ellipse_params_scaled[1])), 
+                        (int(ellipse_params_scaled[2]),
+                            int(ellipse_params_scaled[3])),
+                        ellipse_params_scaled[4] * 180 / np.pi, 
+                        0, 360, ellipse_color, 2)
+            cv2.circle(plate_contour,
+                        (int(plate_point_1[1]), int(plate_point_1[0])),
+                        2, vertex_color, -1)
+            cv2.circle(plate_contour,
+                        (int(plate_point_2[1]), int(plate_point_2[0])),
+                        2, vertex_color, -1)
+            
+        combined_mask = prettySegmentation(mask_onehot, 
+                        self.options.seg_options.model_config.classes, 
+                        self.options.seg_options.color_mapping)
+
+        # Create figure of input image and predicted 
+        # plate contour, segmentation mask and depth map
+        prettyPlotting([img, plate_contour, depth, combined_mask], 
+                        (2,2),
+                        ['Input Image', 'Plate Contour', 'Depth', 
+                            'Object Mask'],
+                        self.options.output_dir,
+                        'Estimated Volume: {:.3f} ml'.format(
+                        estimated_volume))
+

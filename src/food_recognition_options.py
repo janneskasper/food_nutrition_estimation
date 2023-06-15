@@ -152,17 +152,19 @@ class TrainingConfig:
         parser.add_argument("--log_dir", type=str, default="./tmp", 
                             help="Defines where the checkpoints and ouputs are stored")
         parser.add_argument("-ta", "--train_ann", type=str, 
-                            default="./",
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json"),
                             help="Path to training annotations")
         parser.add_argument("-ti", "--train_img", type=str, 
-                            default="./",
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/images"),
                             help="Path to training image dir")
         parser.add_argument("-va", "--val_ann", type=str, 
-                            default="./",
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json"),
                             help="Path to validation annotations")
         parser.add_argument("-vi", "--val_img", type=str, 
-                            default="./",
+                            default=os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images"),
                             help="Path to training image dir")
+        parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
+                            help="Path to segmentation model weights")
 
         return parser.parse_args()
 
@@ -175,6 +177,8 @@ class FoodRecognitionOptions:
 
         self.seg_options = SegmentationOptions(args)
         self.depth_options = DepthEstimationOptions(args)
+
+        self.output_dir = args.output_dir
         
         self.nut_db: str="data/nutrition_db.json"
         self.density_db: str="data/density_db.xlsx"
@@ -193,10 +197,16 @@ class FoodRecognitionOptions:
                             help="Ground truth for depth scaling")
         parser.add_argument("--relax_param", type=float, default=0.1, 
                             help="Relaxation parameter")
-        parser.add_argument("-i", "--input_size", type=tuple, default=(224,224,3), 
+        parser.add_argument("-i", "--input_size", type=tuple, default=(128,224,3), 
                             help="Defines the input size")
         parser.add_argument("--backbone", type=str, default="resnet18", 
                             help="Defines the model backbone")
+        parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
+                            help="Path to segmentation model weights")
+        parser.add_argument("--visualize", action='store_true',
+                            help="Visualize intermediate results")
+        parser.add_argument("--output_dir", type=str, default="output",
+                            help="Path to directory to store output images")
         return parser.parse_args()
 
     @staticmethod
@@ -204,6 +214,8 @@ class FoodRecognitionOptions:
         opt = FoodRecognitionOptions()
         opt.depth_options.model_config.model_path_json = "model_files/monovideo_fine_tune_food_videos.json"
         opt.depth_options.model_config.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
+
+        opt.seg_options.model_config.model_weights_path = opt.seg_options.weights
         
         opt.seg_options.model_config.model_weights_path = "tmp/train_20230615-152539/final_model.hdf5"
 
@@ -235,6 +247,8 @@ class SegmentationOptions:
         self.model_config = ModelConfig(args)
 
         self.relax_param = args.relax_param
+        self.weights = args.weights
+        self.visualize = args.visualize
 
         self.color_mapping = COLOR_MAPPING
 

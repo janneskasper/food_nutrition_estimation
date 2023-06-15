@@ -32,4 +32,5 @@ dist/*
 !models/models.md
 
 logs
+out
 
