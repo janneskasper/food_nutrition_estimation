@@ -97,32 +97,6 @@ class TrainingConfig:
         with open(path, "w") as f:
             f.write(json_dict)
 
-    @staticmethod
-    def createTrainConfig():
-        opt = TrainingConfig()
-
-        opt.train_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/annotations.json")
-        opt.train_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_training_set_release_2.0/images")
-        opt.val_ann_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/annotations.json")
-        opt.val_img_path = os.path.join(os.getcwd(), "../datasets/food_rec/raw_data/public_validation_set_2.0/images")
-
-        opt.epochs = 1
-        opt.lr = 0.001
-        opt.lrd = 0.0001
-
-        opt.model_options.model_weights_path = None
-
-        opt.model_options.classes = [
-                                    'bread-white',
-                                    'apple', 
-                                    'carrot-raw',
-                                    ]
-        
-        opt.model_options.model_backbone = "resnet18"
-        opt.model_options.model = "unet"
-
-        return opt
-
     def __parse_args(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("-w", "--workers", type=int, 
@@ -142,6 +116,9 @@ class TrainingConfig:
                             help="Defines the learning rate decay")
         parser.add_argument("--backbone", type=str, 
                             default="resnet18", 
+                            help="Defines the model backbone")
+        parser.add_argument("--model", type=str, 
+                            default="unet", 
                             help="Defines the model backbone")
         parser.add_argument("-s", "--steps_epoch", type=int, 
                             default=100, 
@@ -167,6 +144,28 @@ class TrainingConfig:
                             help="Path to segmentation model weights")
 
         return parser.parse_args()
+    
+    @staticmethod
+    def createTrainConfig():
+        opt = TrainingConfig()
+
+        opt.epochs = 1
+        opt.lr = 0.001
+        opt.lrd = 0.0001
+
+        opt.model_options.model_weights_path = None
+
+        opt.model_options.classes = [
+                                    'bread-white',
+                                    'apple', 
+                                    'carrot-raw',
+                                    ]
+        
+        opt.model_options.model_backbone = "resnet18"
+        opt.model_options.model = "unet"
+
+        return opt
+
 
 
 class FoodRecognitionOptions:
@@ -231,7 +230,7 @@ class ModelConfig:
 
     def __init__(self, args) -> None:
         self.model_backbone = args.backbone
-        self.model = None
+        self.model = args.model
         self.model_weights_path = None
         self.model_path_json = None
         self.input_size = args.input_size
