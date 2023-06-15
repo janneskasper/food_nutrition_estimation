@@ -60,20 +60,20 @@ class CocoDatasetGenerator:
 
         
     def __len__(self):
-        return len(self.imgs) // self.batch_size
+        return len(self.imgs)
 
     def getClassDistribution(self, normalize=True):
         no_images_per_category = {}
         total = 0
         for n, cat in enumerate(self.categories):
             imgIds = self.coco_obj.getImgIds(catIds=cat['id'])
-            index = self.categoryNames.index(cat["name"])
-            no_images_per_category[index] = len(imgIds)
+            name = cat["name"]
+            no_images_per_category[name] = len(imgIds)
             total += len(imgIds)
         if normalize:
             for k,v in no_images_per_category.items():
                 no_images_per_category[k] = v / total
-        return no_images_per_category
+        return no_images_per_category, total
 
     def filterDataset(self, categories: list):  
         """ Filters the loaded dataset by the given list of category names.
@@ -227,29 +227,44 @@ class CocoDatasetGenerator:
 
         return img_batch, mask_batch
 
-    def visualizeGenerator(self, gen):
+    def visualizeGenerator(self, classes, num_images=1):
         """ Visualizes 4 examples of a given generator. 
 
         Args:
             gen (generator): Generator to call "next()" on to get data
         """
-        img, mask = next(gen)
-        fig = plt.figure(figsize=(20, 10))
-        outerGrid = gridspec.GridSpec(1, 2, wspace=0.1, hspace=0.1)
-        
-        for i in range(2):
-            innerGrid = gridspec.GridSpecFromSubplotSpec(2, 2,
-                            subplot_spec=outerGrid[i], wspace=0.05, hspace=0.05)
+       
+        tiling = (2,2)
+        imgs_class = []
+        for class_name in classes:
+            catIds = self.coco_obj.getCatIds(catNms=[class_name])
+            imgIds = []
+            for catId in catIds:
+                imgIds += self.coco_obj.catToImgs[catId] 
+            imgs: list = self.coco_obj.loadImgs(imgIds)
+            random.shuffle(imgs)
+            imgs_class.append(imgs)
 
-            for j in range(4):
-                ax = plt.Subplot(fig, innerGrid[j])
-                if(i==1):
-                    ax.imshow(img[j])
-                else:
-                    ax.imshow(mask[j][:,:,0])
-                    
-                ax.axis('off')
-                fig.add_subplot(ax)        
+        rows = str(tiling[0])
+        cols = str(tiling[1])
+        fig = plt.figure()
+
+        plt.subplot(221)
+        plt.title(classes[0])
+        img = self.loadImage(imgs_class[0][0])
+        plt.imshow(img)
+        plt.subplot(222)
+        mask = self.generateMask(imgs_class[0][0], self.annotations_per_img[imgs_class[0][0]["id"]])
+        plt.imshow(mask)
+
+        plt.subplot(223)
+        plt.title(classes[1])
+        img = self.loadImage(imgs_class[1][0])
+        plt.imshow(img)
+        plt.subplot(224)
+        mask = self.generateMask(imgs_class[1][0], self.annotations_per_img[imgs_class[1][0]["id"]])
+        plt.imshow(mask)
+
         plt.show()
 
     def extractImages(self, in_path: str, out_path: str):
@@ -279,7 +294,7 @@ class CocoDatasetGenerator:
             shutil.copy2(os.path.join(in_path, in_img_name), out_img_path)
             copy_cnt += 1
 
-        print(f"Copied {copy_cnt} images to {out_path}...")
+        print(f"[*] Copied {copy_cnt} images to {out_path}...")
 
     def visualizeDatasplit(self, num_relevant=30):
         no_images_per_category = {}
@@ -294,13 +309,11 @@ class CocoDatasetGenerator:
         no_images_per_category = {}
         categorie_names = []
         for k, v in no_images_per.items():
-            print(k, v)
             categorie_names.append(k)
             no_images_per_category[k] = v
             i += 1
             if i > num_relevant:
                 break
-        print(categorie_names)
         fig = go.Figure([go.Bar(x=list(no_images_per_category.keys()), y=list(no_images_per_category.values()))])
         fig.update_layout(
             title="No of Image per class", )

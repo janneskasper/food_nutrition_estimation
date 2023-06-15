@@ -17,9 +17,10 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 class FoodNutritionApp:
 
     def __init__(self, options: FoodRecognitionOptions, visualize=False) -> None:
+
+        self.seg_model = getSegmentationModel(config=options.seg_options.model_config, training=False, name_filter=None)
         self.calculator = FoodNutritionCalculator(options)
         self.visualize = options.seg_options.visualize
-        self.seg_model = getSegmentationModel(config=options.seg_options.model_config)
         self.depth_model = getDepthEstimationModel(config=options.depth_options.model_config)
         self.options = options
         self.depth_options = options.depth_options

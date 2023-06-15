@@ -82,6 +82,7 @@ class TrainingConfig:
         self.steps_epoch = int(args.steps_epoch)
         self.epochs = int(args.epochs)
         self.workers = int(args.workers)
+        self.class_weights = None
 
         self.log_dir = args.log_dir
         self.train_ann_path = args.train_ann
@@ -96,37 +97,34 @@ class TrainingConfig:
         with open(path, "w") as f:
             f.write(json_dict)
 
-    @staticmethod
-    def createTrainConfig():
-        opt = TrainingConfig()
-
-        opt.model_options.classes = [
-                                    'bread-white',
-                                    'butter',
-                                    'carrot-raw',
-                                    'apple', 
-                                    'jam', 
-                                    'banana'
-                                    ]
-        return opt
-
     def __parse_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("-w", "--workers", type=int, default=8, 
+        parser.add_argument("-w", "--workers", type=int, 
+                            default=8, 
                             help="Defines the number of training workers")
-        parser.add_argument("-b", "--batch_size", type=int, default=32, 
+        parser.add_argument("-b", "--batch_size", type=int, 
+                            default=32, 
                             help="Defines the training batch size")
-        parser.add_argument("-i", "--input_size", type=tuple, default=(224,224,3), 
+        parser.add_argument("-i", "--input_size", type=tuple, 
+                            default=(224,224,3), 
                             help="Defines the input size")
-        parser.add_argument("-lr", type=float, default=0.001, 
+        parser.add_argument("-lr", type=float, 
+                            default=0.001, 
                             help="Defines the initial learning rate")
-        parser.add_argument("-lrd", type=float, default=0.00001, 
+        parser.add_argument("-lrd", type=float, 
+                            default=0.00001, 
                             help="Defines the learning rate decay")
-        parser.add_argument("--backbone", type=str, default="resnet18", 
+        parser.add_argument("--backbone", type=str, 
+                            default="resnet18", 
                             help="Defines the model backbone")
-        parser.add_argument("-s", "--steps_epoch", type=int, default=200, 
+        parser.add_argument("--model", type=str, 
+                            default="unet", 
+                            help="Defines the model backbone")
+        parser.add_argument("-s", "--steps_epoch", type=int, 
+                            default=100, 
                             help="Defines the training steps per epoch")
-        parser.add_argument("-e", "--epochs", type=int, default=50, 
+        parser.add_argument("-e", "--epochs", type=int, 
+                            default=50, 
                             help="Defines the training number of epochs")
         parser.add_argument("--log_dir", type=str, default="./tmp", 
                             help="Defines where the checkpoints and ouputs are stored")
@@ -146,6 +144,21 @@ class TrainingConfig:
                             help="Path to segmentation model weights")
 
         return parser.parse_args()
+    
+    @staticmethod
+    def createTrainConfig():
+        opt = TrainingConfig()
+
+        opt.model_options.model_weights_path = None
+
+        opt.model_options.classes = [
+                                    'bread-white',
+                                    'apple', 
+                                    'carrot-raw',
+                                    ]
+
+        return opt
+
 
 
 class FoodRecognitionOptions:
@@ -196,15 +209,12 @@ class FoodRecognitionOptions:
 
         opt.seg_options.model_config.model_weights_path = opt.seg_options.weights
         
-        print("[*] Loading segmentation model from: ", opt.seg_options.model_config.model_weights_path)
+        opt.seg_options.model_config.model_weights_path = None
 
         opt.seg_options.model_config.classes = [
-                                                # 'bread-white',
-                                                # 'butter',
-                                                # 'carrot-raw',
-                                                'apple', 
-                                                # 'jam', 
-                                                # 'banana'
+                                                "carrot-raw",
+                                                "apple",
+                                                "bread-white"
                                                 ]
         return opt
 
@@ -213,6 +223,7 @@ class ModelConfig:
 
     def __init__(self, args) -> None:
         self.model_backbone = args.backbone
+        self.model = args.model
         self.model_weights_path = None
         self.model_path_json = None
         self.input_size = args.input_size
