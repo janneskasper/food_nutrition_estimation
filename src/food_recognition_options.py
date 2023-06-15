@@ -112,7 +112,7 @@ class TrainingConfig:
                             default=0.001, 
                             help="Defines the initial learning rate")
         parser.add_argument("-lrd", type=float, 
-                            default=0.000001, 
+                            default=0.00001, 
                             help="Defines the learning rate decay")
         parser.add_argument("--backbone", type=str, 
                             default="resnet18", 
@@ -149,10 +149,6 @@ class TrainingConfig:
     def createTrainConfig():
         opt = TrainingConfig()
 
-        opt.epochs = 1
-        opt.lr = 0.001
-        opt.lrd = 0.0001
-
         opt.model_options.model_weights_path = None
 
         opt.model_options.classes = [
@@ -160,9 +156,6 @@ class TrainingConfig:
                                     'apple', 
                                     'carrot-raw',
                                     ]
-        
-        opt.model_options.model_backbone = "resnet18"
-        opt.model_options.model = "unet"
 
         return opt
 
@@ -216,7 +209,7 @@ class FoodRecognitionOptions:
 
         opt.seg_options.model_config.model_weights_path = opt.seg_options.weights
         
-        opt.seg_options.model_config.model_weights_path = "tmp/train_20230615-152539/final_model.hdf5"
+        opt.seg_options.model_config.model_weights_path = None
 
         opt.seg_options.model_config.classes = [
                                                 "carrot-raw",
