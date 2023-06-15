@@ -20,6 +20,20 @@ python train.py -b 32  -ta ..\food_volume_estimation\datasets\raw_data\public_tr
 ```
 
 ## Testing
+
+### Server
+If you want to get images of the results you can do the following command:
 ```
-python .\test_client.py
+python .\run_app.py --weights <path_to_model_weights> --visualize --output_dir <output_dir>
+```
+
+Otherwise you can just run:
+```
+python .\run_app.py --weights <path_to_model_weights>
+```
+
+### Client
+You can test using the following command once the server is running:
+```
+python .\test_client.py <file/directory pointing to images>
 ```

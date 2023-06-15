@@ -135,8 +135,8 @@ if __name__ == "__main__":
         # test_img = ["data/test_images/plate20cm/red/"+ path for path in os.listdir("data/test_images/plate20cm/red")]
         test_img = f"{os.getcwd()}/../datasets/filtered/carrot-raw_17.jpg"
         # test_img = "data/test_images/plate25cm/applered2.jpg"
+        # test_img = getImagesFromVideo("data/test_images/video/60fpsfhd.mp4", rate=5)
 
-    # test_img = getImagesFromVideo("data/test_images/video/60fpsfhd.mp4", rate=5)
     
     # test_run(test_img, type="seg")
     # test_run(test_img, type="depth")
