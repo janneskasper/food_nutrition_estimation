@@ -36,6 +36,7 @@ def getSegmentationModel(config: ModelConfig, lr=0.001, training=False, name_fil
         weights_path = os.path.join(os.getcwd(), config.model_weights_path)
         assert os.path.isfile(weights_path), f"Loading segmentation model weights: file not found!"
         model.load_weights(weights_path)
+        print("[*] Loaded weights from file ", weights_path)
 
     __set_weights_trainable(model, trainable=training, name_filter=name_filter)
 

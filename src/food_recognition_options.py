@@ -193,6 +193,9 @@ class FoodRecognitionOptions:
                             help="Defines the input size")
         parser.add_argument("--backbone", type=str, default="resnet18", 
                             help="Defines the model backbone")
+        parser.add_argument("--model", type=str, 
+                            default="unet", 
+                            help="Defines the segmentation model")
         parser.add_argument("--weights", type=str, default="model_files/seg_model_e18.hdf5",
                             help="Path to segmentation model weights")
         parser.add_argument("--visualize", action='store_true',
@@ -208,13 +211,11 @@ class FoodRecognitionOptions:
         opt.depth_options.model_config.model_weights_path = "model_files/monovideo_fine_tune_food_videos.h5"
 
         opt.seg_options.model_config.model_weights_path = opt.seg_options.weights
-        
-        opt.seg_options.model_config.model_weights_path = None
 
         opt.seg_options.model_config.classes = [
-                                                "carrot-raw",
+                                                # "carrot-raw",
                                                 "apple",
-                                                "bread-white"
+                                                # "bread-white"
                                                 ]
         return opt
 

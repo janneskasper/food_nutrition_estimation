@@ -1,0 +1,284 @@
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (103.20917510986328, 60.41030502319336, 89.5, 43.3939393939394, 0.02632619542114334) Plate diameter: 0.011326846
+[*] Scaling factor: 88.28583202846086
+[*] Estimated volume for apple: 124.41129226986085 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 99.52903381588868 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (100.8600845336914, 58.714290618896484, 92.5, 41.11111111111111, 0.02632619542114334) Plate diameter: 0.011697714
+[*] Scaling factor: 85.48678668744638
+[*] Estimated volume for apple: 134.56284099774385 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 107.65027279819509 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (105.01470184326172, 57.51760482788086, 93.0, 41.33333333333333, 0.008775398473714668) Plate diameter: 0.011765132
+[*] Scaling factor: 84.99692338479285
+[*] Estimated volume for apple: 131.43997841361963 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 105.15198273089571 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (109.13848114013672, 59.21979522705078, 87.5, 40.656565656565654, -0.02632619542114356) Plate diameter: 0.0110702235
+[*] Scaling factor: 90.33241268585483
+[*] Estimated volume for apple: 160.70969585336204 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 128.56775668268963 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (109.82315063476562, 61.684757232666016, 92.5, 43.91414141414141, -0.008775398473714668) Plate diameter: 0.011706414
+[*] Scaling factor: 85.42325818363034
+[*] Estimated volume for apple: 145.2467427449696 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 116.19739419597568 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (107.55106353759766, 61.43726348876953, 95.0, 44.14141414141414, 0.008775398473714668) Plate diameter: 0.012018599
+[*] Scaling factor: 83.20437614569133
+[*] Estimated volume for apple: 74.1499880379631 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 59.31999043037048 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (105.81721496582031, 60.85376739501953, 93.0, 42.27272727272727, 0.008775398473714668) Plate diameter: 0.011761566
+[*] Scaling factor: 85.02269392745282
+[*] Estimated volume for apple: 71.75674330391645 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 57.405394643133164 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (107.76390075683594, 62.04286193847656, 93.5, 43.44444444444444, 0.008775398473714668) Plate diameter: 0.011830394
+[*] Scaling factor: 84.52803742548191
+[*] Estimated volume for apple: 69.09615628764816 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 55.27692503011853 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (104.36822509765625, 60.805458068847656, 93.0, 41.33333333333333, 0.008775398473714668) Plate diameter: 0.011763152
+[*] Scaling factor: 85.01123019767567
+[*] Estimated volume for apple: 66.06690803665458 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 52.853526429323665 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (102.68749237060547, 60.95207595825195, 92.5, 42.97979797979798, -0.008775398473714668) Plate diameter: 0.01169806
+[*] Scaling factor: 85.48426170014783
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\point_cloud_utils.py:137: RuntimeWarning: divide by zero encountered in double_scalars
+  circum_r = a * b * c / (4.0 * area)
+[*] Estimated volume for apple: 63.83046294649253 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 51.06437035719403 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (100.0306396484375, 61.43644332885742, 91.5, 40.666666666666664, 0.02632619542114334) Plate diameter: 0.011570571
+[*] Scaling factor: 86.42615829641899
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\point_cloud_utils.py:137: RuntimeWarning: divide by zero encountered in double_scalars
+  circum_r = a * b * c / (4.0 * area)
+[*] Estimated volume for apple: 59.16335660327962 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 47.3306852826237 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (112.3789291381836, 59.563148498535156, 89.0, 41.35353535353536, 0.06142778931600135) Plate diameter: 0.011273889
+[*] Scaling factor: 88.70053727119631
+[*] Estimated volume for apple: 64.84666542105232 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 51.87733233684186 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (104.82888793945312, 60.2933349609375, 97.5, 42.34848484848485, -0.008775398473714668) Plate diameter: 0.012320313
+[*] Scaling factor: 81.16677122361871
+[*] Estimated volume for apple: 41.98340736154894 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 33.586725889239155 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (113.53045654296875, 58.8388786315918, 90.5, 42.05050505050505, 0.06142778931600135) Plate diameter: 0.011397851
+[*] Scaling factor: 87.73583953194994
+[*] Estimated volume for apple: 52.34144968423364 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 41.873159747386914 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (114.39779663085938, 58.3433952331543, 91.5, 41.590909090909086, -0.008775398473714668) Plate diameter: 0.011566337
+[*] Scaling factor: 86.45779410367446
+[*] Estimated volume for apple: 69.6132558945731 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 55.69060471565848 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_estimator.py:68: RuntimeWarning: invalid value encountered in double_scalars
+  beta = (q3 * q4 + 1) * (q1 + q2) - (q1 * q2 + 1) * (q3 + q4)
+[*] Ellipse parameters: (113.60162353515625, 58.065250396728516, 93.0, 42.27272727272727, -0.008775398473714668) Plate diameter: 0.011753744
+[*] Scaling factor: 85.07927023735296
+[*] Estimated volume for apple: 74.7399306680656 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 59.79194453445248 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (113.3753433227539, 58.90301513671875, 94.0, 42.72727272727273, 0.043876992368572676) Plate diameter: 0.01189742
+[*] Scaling factor: 84.05183942050718
+[*] Estimated volume for apple: 43.194138179852324 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 34.55531054388186 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (108.48908996582031, 59.91059494018555, 95.5, 42.44444444444444, 0.0965293832108598) Plate diameter: 0.012062736
+[*] Scaling factor: 82.89993347881112
+[*] Estimated volume for apple: 32.963796274707164 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 26.371037019765733 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (107.33740997314453, 59.607608795166016, 87.0, 41.303030303030305, 0.02632619542114334) Plate diameter: 0.011002956
+[*] Scaling factor: 90.88466806508094
+[*] Estimated volume for apple: 58.85528983030628 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 47.08423186424503 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_estimator.py:111: RuntimeWarning: divide by zero encountered in double_scalars
+  ax = math.sqrt((x0 ** 2 * n ** 2 + y0 ** 2) / (n ** 2 * (k ** 2 + 1)))
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  v = (x * c + y * s) ** 2 / a ** 2 + (-x * s + y * c) ** 2 / b ** 2
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_merger.py:40: RuntimeWarning: divide by zero encountered in double_scalars
+  dist[3] = abs(float(ellipse1.minor_len - ellipse2.minor_len)) / min(ellipse1.minor_len, ellipse2.minor_len)  # Distance of b
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_merger.py:43: RuntimeWarning: invalid value encountered in double_scalars
+  r1 = ellipse1.minor_len / ellipse1.major_len
+[*] Ellipse parameters: (120.57408905029297, 65.6333999633789, 89.0, 43.151515151515156, -0.02632619542114356) Plate diameter: 0.01126029
+[*] Scaling factor: 88.80766185821037
+[*] Estimated volume for apple: 59.87631398289248 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 47.90105118631399 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (118.81196594238281, 61.31679153442383, 91.0, 43.2020202020202, 0.02632619542114334) Plate diameter: 0.011514883
+[*] Scaling factor: 86.84413367150837
+[*] Estimated volume for apple: 41.65904562441679 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 33.327236499533434 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (122.15381622314453, 61.98695755004883, 91.0, 44.121212121212125, 0.02632619542114334) Plate diameter: 0.011508421
+[*] Scaling factor: 86.89289316329199
+[*] Estimated volume for apple: 38.052597272564185 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 30.44207781805135 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (118.35015869140625, 52.808074951171875, 25.0, 15.151515151515152, 0.14918177405314648) Plate diameter: 0.0031871637
+[*] Scaling factor: 313.7585903299962
+[*] Estimated volume for apple: 0.0 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 0.0 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (121.93535614013672, 58.43763732910156, 88.5, 43.803030303030305, 0.07897858626343046) Plate diameter: 0.011219787
+[*] Scaling factor: 89.12824845368056
+[*] Estimated volume for apple: 42.65041113542324 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 34.12032890833859 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (120.53125762939453, 58.5020866394043, 87.0, 40.42424242424242, 0.008775398473714668) Plate diameter: 0.010998281
+[*] Scaling factor: 90.92330206479394
+[*] Estimated volume for apple: 64.2158824648688 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 51.372705971895044 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_estimator.py:69: RuntimeWarning: invalid value encountered in double_scalars
+  k_plus = (-beta + math.sqrt(beta ** 2 + 4 * alpha ** 2)) / (2 * alpha)
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_estimator.py:68: RuntimeWarning: invalid value encountered in double_scalars
+  beta = (q3 * q4 + 1) * (q1 + q2) - (q1 * q2 + 1) * (q3 + q4)
+[*] Ellipse parameters: (115.37678527832031, 60.366737365722656, 90.5, 42.964646464646464, 0.008775398473714668) Plate diameter: 0.011446297
+[*] Scaling factor: 87.36449746663403
+[*] Estimated volume for apple: 228.97850961036139 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 183.18280768828913 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (117.45863342285156, 60.301483154296875, 90.5, 42.964646464646464, 0.02632619542114334) Plate diameter: 0.011445341
+[*] Scaling factor: 87.37179837389165
+[*] Estimated volume for apple: 160.37659195623644 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 128.30127356498915 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (111.46575164794922, 58.513580322265625, 92.5, 40.17676767676768, 0.07897858626343046) Plate diameter: 0.01165807
+[*] Scaling factor: 85.7774938433459
+[*] Estimated volume for apple: 68.13805144306845 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 54.51044115445476 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (112.10623931884766, 57.22434616088867, 88.5, 41.12121212121212, 0.02632619542114334) Plate diameter: 0.011189955
+[*] Scaling factor: 89.3658620057406
+[*] Estimated volume for apple: 70.2260028928132 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 56.18080231425056 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_estimator.py:71: RuntimeWarning: divide by zero encountered in 
+double_scalars
+  v = ((q1 - k_plus) * (q2 - k_plus) / ((1 + q1 * k_plus) * (1 + q2 * k_plus)))
+[*] Ellipse parameters: (113.87229919433594, 59.69587326049805, 92.0, 42.74747474747475, 0.02632619542114334) Plate diameter: 0.01162523
+[*] Scaling factor: 86.01980116797154
+[*] Estimated volume for apple: 77.2265886405378 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 61.781270912430244 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (123.72728729248047, 62.046756744384766, 87.5, 42.42424242424242, 0.008775398473714668) Plate diameter: 0.011064726
+[*] Scaling factor: 90.37729506418793
+[*] Estimated volume for apple: 79.8969706926844 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 63.91757655414753 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (121.60879516601562, 60.23826599121094, 92.0, 44.60606060606061, 0.008775398473714668) Plate diameter: 0.011632815
+[*] Scaling factor: 85.96371555020399
+[*] Estimated volume for apple: 66.7938056409625 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 53.435044512770006 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (119.27163696289062, 52.466346740722656, 27.0, 13.909090909090908, 0.043876992368572676) Plate diameter: 0.0034113463
+[*] Scaling factor: 293.13939365480445
+[*] Estimated volume for apple: 0.0 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 0.0 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (124.29706573486328, 60.06167221069336, 93.5, 45.333333333333336, -0.02632619542114356) Plate diameter: 0.011820532
+[*] Scaling factor: 84.59855848473866
+[*] Estimated volume for apple: 52.67785109683308 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 42.14228087746647 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (119.86243438720703, 58.665733337402344, 96.0, 44.60606060606061, 0.008775398473714668) Plate diameter: 0.012124501
+[*] Scaling factor: 82.47761999308067
+[*] Estimated volume for apple: 62.11382385469065 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 49.69105908375252 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (121.32147979736328, 58.239707946777344, 92.5, 43.91414141414141, -0.008775398473714668) Plate diameter: 0.011695604
+[*] Scaling factor: 85.50221208548231
+[*] Estimated volume for apple: 79.64296048229983 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 63.71436838583986 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (122.72406768798828, 56.1656494140625, 91.5, 40.666666666666664, 0.06142778931600135) Plate diameter: 0.011584774
+[*] Scaling factor: 86.32020179023232
+[*] Estimated volume for apple: 92.24683101769565 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 73.79746481415653 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (123.91377258300781, 56.27128219604492, 88.5, 39.33333333333333, 0.043876992368572676) Plate diameter: 0.011195554
+[*] Scaling factor: 89.32116842544401
+[*] Estimated volume for apple: 308.7712990168692 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 247.01703921349537 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (114.48796844482422, 58.96134567260742, 94.5, 42.95454545454545, 0.043876992368572676) Plate diameter: 0.01189499
+[*] Scaling factor: 84.06900890907309
+[*] Estimated volume for apple: 326.33886687984 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 261.071093503872 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (120.17008972167969, 60.69685363769531, 98.0, 43.55555555555555, 0.02632619542114334) Plate diameter: 0.012384396
+[*] Scaling factor: 80.74677168376594
+[*] Estimated volume for apple: 242.32418944960457 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 193.85935155968366 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_center_estimator.py:84: RuntimeWarning: divide by zero encountered in double_scalars
+  cab_x = (mb[1] - tb * mb[0] - ma[1] + ta * ma[0]) / (ta - tb)
+C:\Users\Pasca\source\repos\food_nutrition_estimation\src\ellipse_detection\ellipse_center_estimator.py:85: RuntimeWarning: divide by zero encountered in double_scalars
+  cab_y = (ta * mb[1] - tb * ma[1] + ta * tb * (ma[0] - mb[0])) / (ta - tb)
+[*] Ellipse parameters: (119.39154052734375, 47.99711227416992, 29.5, 17.58080808080808, -0.06142778931600157) Plate diameter: 0.0037293814
+[*] Scaling factor: 268.1409869199269
+[*] Estimated volume for apple: 0.0 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 0.0 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] No ellipse found. Scaling with expected median depth:  0.010105258
+[*] Scaling factor: 64.32295042836058
+[*] Estimated volume for apple: 32.467181941673786 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 25.97374555333903 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0
+[*] Ellipse parameters: (94.49156188964844, 54.860450744628906, 62.5, 39.77272727272727, 0.008775398473714668) Plate diameter: 0.007899486
+[*] Scaling factor: 126.59050750830376
+[*] Estimated volume for apple: 277.7480480852234 cm3
+WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+[*] Weight of apple is 222.19843846817872 g, reference weight is 200.0 g, density is 0.8 g/cm3
+[*] Creating intrinsics matrix from given FOV: 70.0

@@ -70,7 +70,6 @@ class FoodNutritionApp:
         images, plate_diameter = self.__getData(data=data)
         image_batch = []
         image_depth_batch = []
-        image_segmentation_batch = []
         for img in images:
             img_resized = cv2.resize(img, (self.options.depth_options.model_config.input_size[1],
                                    self.options.depth_options.model_config.input_size[0]))
@@ -78,15 +77,13 @@ class FoodNutritionApp:
 
             image_batch.append(img_resized)
             image_depth_batch.append(img_correct_color)
-            image_segmentation_batch.append(img)
 
         image_batch = np.array(image_batch)
         image_depth_batch = np.array(image_depth_batch)
-        image_segmentation_batch = np.array(image_segmentation_batch)
 
         # Predict segmentation and depth of batch
         with self.graph.as_default():
-            seg_masks = self.seg_model.predict(image_segmentation_batch)
+            seg_masks = self.seg_model.predict(image_batch)
             inv_disp_map = self.depth_model.predict(image_depth_batch, batch_size=1)[0]
 
         # For all images in batch, predict nutrition
